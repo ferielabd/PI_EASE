@@ -2,10 +2,10 @@ package com.example.pi_ease.RestControllers;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import tn.esprit.pi_ease.DAO.Entities.ActivitySector;
-import tn.esprit.pi_ease.DAO.Entities.Credit;
-import tn.esprit.pi_ease.Services.Interfaces.IActivitySectorService;
-import tn.esprit.pi_ease.Services.Interfaces.ICreditService;
+import com.example.pi_ease.DAO.Entities.ActivitySector;
+import com.example.pi_ease.DAO.Entities.Credit;
+import com.example.pi_ease.Services.Interfaces.IActivitySectorService;
+import com.example.pi_ease.Services.Interfaces.ICreditService;
 
 import java.util.List;
 

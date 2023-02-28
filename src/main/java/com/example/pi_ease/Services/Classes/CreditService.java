@@ -2,9 +2,9 @@ package com.example.pi_ease.Services.Classes;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import tn.esprit.pi_ease.DAO.Entities.Credit;
-import tn.esprit.pi_ease.DAO.Repositories.CrediRepository;
-import tn.esprit.pi_ease.Services.Interfaces.ICreditService;
+import com.example.pi_ease.DAO.Entities.Credit;
+import com.example.pi_ease.DAO.Repositories.CrediRepository;
+import com.example.pi_ease.Services.Interfaces.ICreditService;
 
 import java.util.List;
 

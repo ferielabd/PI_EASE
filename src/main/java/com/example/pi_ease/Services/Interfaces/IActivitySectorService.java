@@ -1,6 +1,6 @@
 package com.example.pi_ease.Services.Interfaces;
 
-import tn.esprit.pi_ease.DAO.Entities.ActivitySector;
+import com.example.pi_ease.DAO.Entities.ActivitySector;
 
 import java.util.List;
 
