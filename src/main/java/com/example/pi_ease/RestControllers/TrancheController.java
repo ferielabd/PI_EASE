@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@RequestMapping("/Tranche")
 public class TrancheController {
     private ITrancheService iTrancheService;
     @GetMapping("/afficherTranche")
@@ -28,12 +29,12 @@ public class TrancheController {
         return iTrancheService.selectById(id);
     }
 
-    @PostMapping("/editerTranche")
+    @PutMapping("/editerTranche")
     public Tranche Modifier(@RequestBody Tranche tranche){
         return iTrancheService.edit(tranche);
     }
 
-    @GetMapping("/supprimerTranche/{id}")
+    @DeleteMapping("/supprimerTranche/{id}")
     public void Supprimer(@PathVariable int id){
         iTrancheService.deleteById(id);
     }

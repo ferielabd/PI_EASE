@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@RequestMapping("/Credit")
 public class CreditController {
 
     private ICreditService iCreditService;
@@ -29,12 +30,12 @@ public class CreditController {
         return iCreditService.selectById(id);
     }
 
-    @PostMapping("/editerCredit")
+    @PutMapping("/editerCredit")
     public Credit Modifier(@RequestBody Credit credit){
         return iCreditService.edit(credit);
     }
 
-    @GetMapping("/supprimerCredit/{id}")
+    @DeleteMapping("/supprimerCredit/{id}")
     public void Supprimer(@PathVariable int id){
         iCreditService.deleteById(id);
     }

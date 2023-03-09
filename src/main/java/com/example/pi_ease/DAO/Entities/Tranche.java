@@ -1,5 +1,6 @@
 package com.example.pi_ease.DAO.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -26,5 +27,6 @@ public class Tranche implements Serializable {
     Date pay_Date;
 
     @ManyToOne
+    @JsonIgnore
     Credit creditT;
 }

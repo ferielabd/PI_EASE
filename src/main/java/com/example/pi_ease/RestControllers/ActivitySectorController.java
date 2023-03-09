@@ -8,6 +8,7 @@ import com.example.pi_ease.Services.Interfaces.IActivitySectorService;
 import java.util.List;
 @RestController
 @AllArgsConstructor
+@RequestMapping("/ActivitySector")
 public class ActivitySectorController {
 
     private IActivitySectorService iActivitySectorService;
@@ -26,12 +27,12 @@ public class ActivitySectorController {
         return iActivitySectorService.selectById(id);
     }
 
-    @PostMapping("/editerActivityS")
+    @PutMapping("/editerActivityS")
     public ActivitySector Modifier(@RequestBody ActivitySector activitySector){
         return iActivitySectorService.edit(activitySector);
     }
 
-    @GetMapping("/supprimerActivityS/{id}")
+    @DeleteMapping("/supprimerActivityS/{id}")
     public void Supprimer(@PathVariable int id){
         iActivitySectorService.deleteById(id);
     }

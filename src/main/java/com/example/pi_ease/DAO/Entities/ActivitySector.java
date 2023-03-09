@@ -1,5 +1,6 @@
 package com.example.pi_ease.DAO.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -21,6 +22,7 @@ public class ActivitySector implements Serializable {
     int Id_SA;
     @Column(name = "name")
     String nom;
-   @OneToMany(mappedBy = "activitySector")
+   @OneToMany(mappedBy = "activitySector",cascade = CascadeType.ALL)
+   @JsonIgnore
     List<Credit> creditList;
 }

@@ -1,5 +1,6 @@
 package com.example.pi_ease.DAO.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -44,8 +45,8 @@ public class User implements Serializable {
     @OneToMany (mappedBy = "user")
     List <Notification> emitter;
 
-  @OneToMany(mappedBy = "userCredit")
-    List<Credit> creditList;
+  @OneToMany(mappedBy = "userCredit",cascade = CascadeType.ALL)
+   List<Credit> creditList;
 
     @OneToMany(mappedBy = "userClaim")
     List<Claim> claimList;
