@@ -8,6 +8,7 @@ import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -36,13 +37,19 @@ public class Credit  implements Serializable {
 
     @NotNull
     @Temporal(TemporalType.DATE)
-    @Column(name = "obtaining_Date")
+    @Column(name = "obtaining_Date", precision = 19 ,scale =2 ,nullable = false)
     Date OB_Date;
 
     @NotNull
     @Min(1)
-    @Column(name = "amount")
-    float montant;
+    @Column(name = "amount", precision = 19 ,scale =2 ,nullable = false)
+    BigDecimal montant;
+
+    @Column(name="PRINCIPAL_TO_BE_PAID", precision = 19 ,scale =2 ,nullable = false)
+     BigDecimal monPP;
+
+    @Column(name="REMAINING_PRINCIPAL", precision = 19 ,scale =2 ,nullable = false)
+     BigDecimal RestApay;
     @Column(name = "State")
     String etat;
 

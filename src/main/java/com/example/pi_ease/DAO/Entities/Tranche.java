@@ -22,7 +22,12 @@ public class Tranche implements Serializable {
     @Column(name = "Id_T")
     int Id_T;
 
+    @Column(name="nb_Tranche",nullable = false)
+     int nbT;
+
+    @Column(name="MONTHLY_AMOUNT", precision = 19 ,scale =2 ,nullable = false)
     float mon_pay;
+    @Column(name="PAYMENT_DATE",nullable = false)
     @Temporal(TemporalType.DATE)
     Date pay_Date;
 
