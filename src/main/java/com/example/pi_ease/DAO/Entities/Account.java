@@ -20,11 +20,12 @@ public class Account implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int idA;
-    float amount;
+    float solde;
     String rib;
     @Temporal(TemporalType.DATE)
     Date openDate;
     String state;
+    Demande_C demande;
     @Enumerated(EnumType.STRING)
     TypeAccount typeAccount;
     @ManyToMany(mappedBy = "accountList")
@@ -34,4 +35,5 @@ public class Account implements Serializable {
 
     @ManyToMany
     List<User> userAcc;
+
 }

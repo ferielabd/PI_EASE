@@ -3,15 +3,18 @@ package com.example.pi_ease.Services.Classes;
 import com.example.pi_ease.DAO.Entities.Account;
 import com.example.pi_ease.DAO.Repositories.accountRepo;
 import com.example.pi_ease.Services.Interfaces.IAccountService;
-import lombok.AllArgsConstructor;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.transaction.Transactional;
 import java.util.List;
 @AllArgsConstructor
 @Service
-public class AccountService implements IAccountService {
+public class AccountService<amount> implements IAccountService {
     private accountRepo accountrepo;
+
     @Override
     public Account add(Account a) {
         return accountrepo.save(a);
@@ -59,4 +62,5 @@ public class AccountService implements IAccountService {
         accountrepo.deleteAll(list);
 
     }
+
 }
