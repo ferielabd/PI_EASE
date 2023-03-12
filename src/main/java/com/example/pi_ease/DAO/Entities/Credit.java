@@ -51,7 +51,7 @@ public class Credit  implements Serializable {
     @Column(name="REMAINING_PRINCIPAL", precision = 19 ,scale =2 ,nullable = false)
      BigDecimal RestApay;
     @Column(name = "State")
-    String etat;
+    CreditStatusType etat;
 
     @NotNull
     @Column(name = "typeCredit")
