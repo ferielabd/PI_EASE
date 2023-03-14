@@ -1,4 +1,4 @@
-package com.example.pi_ease.DAO.Entities;
+package com.example.pi_ease.Exceptions;
 import com.example.pi_ease.Services.Interfaces.BaseErrorMessage;
 
 public enum CreditErrorMessage   implements BaseErrorMessage {

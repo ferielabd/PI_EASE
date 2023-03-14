@@ -6,13 +6,11 @@ import com.example.pi_ease.DAO.Entities.Credit;
 import com.example.pi_ease.DAO.Repositories.CrediRepository;
 import com.example.pi_ease.Services.Interfaces.ICreditService;
 import org.springframework.validation.annotation.Validated;
-
 import javax.validation.Valid;
 import java.util.List;
 
 @AllArgsConstructor
 @Service
-@Validated
 public class CreditService implements ICreditService {
     CrediRepository crediRepository;
     @Override
