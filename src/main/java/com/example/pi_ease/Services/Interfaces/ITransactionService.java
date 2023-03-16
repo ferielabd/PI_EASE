@@ -1,8 +1,6 @@
 package com.example.pi_ease.Services.Interfaces;
 
-import com.example.pi_ease.DAO.Entities.Account;
 import com.example.pi_ease.DAO.Entities.Transaction;
-import com.example.pi_ease.DAO.Repositories.CompteIntrouvableException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,9 +14,7 @@ public interface ITransactionService {
 
     List<Transaction> addAll(List<Transaction> list);
 
-    void effectuerVirement(Integer idCompteEmetteur, Integer idCompteBeneficiaire, float montant) throws CompteIntrouvableException;
-
-    void effectuerVersement(Integer idCompteBeneficiaire, float montant);
-
-    void effectuerRetrait(Integer idCompte, float montant);
+   String ajouterVirement(Transaction transaction);
+    String ajouterRetrait(Transaction transaction);
+    String ajouterVersement(Transaction transaction);
 }

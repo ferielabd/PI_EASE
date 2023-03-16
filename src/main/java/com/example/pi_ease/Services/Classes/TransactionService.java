@@ -2,14 +2,16 @@ package com.example.pi_ease.Services.Classes;
 
 import com.example.pi_ease.DAO.Entities.Account;
 import com.example.pi_ease.DAO.Entities.Transaction;
-import com.example.pi_ease.DAO.Repositories.CompteIntrouvableException;
-import com.example.pi_ease.DAO.Repositories.SoldeInsuffisantException;
+import com.example.pi_ease.DAO.Entities.TypeAccount;
+import com.example.pi_ease.DAO.Entities.TypeTransaction;
 import com.example.pi_ease.DAO.Repositories.accountRepo;
 import com.example.pi_ease.DAO.Repositories.transactionRepo;
 import com.example.pi_ease.Services.Interfaces.ITransactionService;
 import lombok.AllArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 @RestController
@@ -47,67 +49,76 @@ public class TransactionService implements ITransactionService {
 
 
 
-
-        public void effectuerVirement (Integer idCompteEmetteur, Integer idCompteBeneficiaire,float montant) throws
-                SoldeInsuffisantException, CompteIntrouvableException {
-        Account compteEmetteur = accountrepo.findById(idCompteEmetteur).orElseThrow(() -> new CompteIntrouvableException(idCompteEmetteur));
-        Account compteBeneficiaire = accountrepo.findById(idCompteBeneficiaire).orElseThrow(() -> new CompteIntrouvableException(idCompteBeneficiaire));
-
-        if (compteEmetteur.getSolde() < montant) {
-            throw new SoldeInsuffisantException();
-        }
-
-        float nouveauSoldeEmetteur = compteEmetteur.getSolde()- montant;
-        compteEmetteur.setSolde(nouveauSoldeEmetteur);
-        accountrepo.save(compteEmetteur);
-
-        float nouveauSoldeBeneficiaire = compteBeneficiaire.getSolde() + montant;
-        compteBeneficiaire.setSolde(nouveauSoldeBeneficiaire);
-        accountrepo.save(compteBeneficiaire);
-        Transaction transaction = new Transaction();
+    @Transactional
+    public String ajouterVirement(Transaction transaction) {
         transaction.setDate_t(new Date());
-        transaction.setMontant(montant);
-        //transaction.set(compteEmetteur);
-        //transaction.setCompteBeneficiaire(compteBeneficiaire);
-        transactionrepo.save(transaction);
 
-    }
+        if (transaction.getTypeTransaction() == TypeTransaction.VIREMENT) {
+            Account expediteur = accountrepo.findById(transaction.getExpediteur().getIdAccount()).get();
 
-    @Override
-    public void effectuerVersement(Integer idCompteBeneficiaire, float montant){
+            if (expediteur.getTypeAccount() == TypeAccount.EPARGNE) {
+                return "On n peut pas  faire le virement à partir d'epargne";
+            } else if (expediteur.getTypeAccount() != TypeAccount.EPARGNE
+                    && expediteur.getSolde() < transaction.getMontant() + 3) {
+                return "On ne peut pas faire un virement: Solde insuff";
+            }
+            Account destinataire = accountrepo.findById(transaction.getDestinataire().getIdAccount()).get();
+            transaction.setDestinataire(destinataire);
+            transaction.setExpediteur(expediteur);
 
-            Account compteBeneficiaire = accountrepo.findById(idCompteBeneficiaire).get();
-            float nouveauSoldeBeneficiaire = compteBeneficiaire.getSolde() + montant;
-            compteBeneficiaire.setSolde(nouveauSoldeBeneficiaire);
-            accountrepo.save(compteBeneficiaire);
-            Transaction transaction = new Transaction();
-            transaction.setDate_t(new Date());
-            transaction.setMontant(montant);
-
-            //transaction.setCompteBeneficiaire(compteBeneficiaire.getIdA());
+            transaction.getExpediteur().setSolde(transaction.getExpediteur().getSolde() - (transaction.getMontant()+3));
+            transaction.getDestinataire().setSolde(transaction.getDestinataire().getSolde() + transaction.getMontant());
             transactionrepo.save(transaction);
+            return transaction.getTypeTransaction() + " de " + transaction.getMontant() + " DT de compte " + transaction.getExpediteur().getIdAccount() +
+                    " vers le compte " + destinataire.getIdAccount() + " approuveé";
         }
-
-
-
-
-    public void effectuerRetrait ( Integer idCompte,float montant)throws
-            SoldeInsuffisantException  {
-
-        Account compte = accountrepo.findById(idCompte).get();
-        if (compte.getSolde() < montant) {
-            throw new SoldeInsuffisantException();
-        }
-        float nouveauSoldeBeneficiaire = compte.getSolde() - montant;
-        compte.setSolde(nouveauSoldeBeneficiaire);
-        accountrepo.save(compte);
-        Transaction transaction = new Transaction();
-        transaction.setDate_t(new Date());
-        transaction.setMontant(montant);
-        //transaction.setCompteEmetteur(compteEmetteur);
-        //transaction.setCompteBeneficiaire(compteBeneficiaire);
-        transactionrepo.save(transaction);
+        return "NOT VIR";
     }
+    @Transactional
+    public String ajouterVersement(Transaction transaction) {
+
+        transaction.setDate_t(new Date());
+        if (transaction.getTypeTransaction() == TypeTransaction.VERSEMENT) {
+            Account destinataire = accountrepo.findById(transaction.getDestinataire().getIdAccount()).get();
+
+            if (destinataire.getTypeAccount() != TypeAccount.EPARGNE) {
+                transaction.setMontant(transaction.getMontant()-2);
+            }
+            transaction.setDestinataire(destinataire);
+            transaction.getDestinataire().setSolde(transaction.getDestinataire().getSolde() + transaction.getMontant());
+            transactionrepo.save(transaction);
+            return transaction.getTypeTransaction() + " de " + transaction.getMontant() + " DT vers compte " + transaction.getDestinataire().getIdAccount() +
+                    " approuveé";
+        }
+        return "NOT VIR";
+    }
+    @Transactional
+    public String ajouterRetrait(Transaction transaction) {
+        transaction.setDate_t(new Date());
+
+        if (transaction.getTypeTransaction() == TypeTransaction.RETRAIT) {
+            Account expediteur = accountrepo.findById(transaction.getExpediteur().getIdAccount()).get();
+            if (expediteur.getSolde() < transaction.getMontant()+2) {
+                return "SOLDE INSUFAISANT";
+            }
+            transaction.setExpediteur(expediteur);
+            transaction.getExpediteur().setSolde(transaction.getExpediteur().getSolde() - (transaction.getMontant()+2));
+            transactionrepo.save(transaction);
+            return transaction.getTypeTransaction() + " de " + transaction.getMontant() + " DT de compte " + transaction.getExpediteur().getIdAccount() +
+                    " approuveé";
+        }
+        return "NOT VIR";
+    }
+    @Scheduled(fixedDelay = 30000)
+    public void GetAllTransactionByDate() {
+        List<Transaction> transactionList = transactionrepo.findAll();
+
+        for (Transaction t: transactionList) {
+        }
+        System.out.println("tttttt");
+
+}
+
 }
 
 

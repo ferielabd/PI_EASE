@@ -1,15 +1,13 @@
 package com.example.pi_ease.RestController;
 
-import com.example.pi_ease.DAO.Entities.Account;
 import com.example.pi_ease.DAO.Entities.Transaction;
-import com.example.pi_ease.DAO.Repositories.CompteIntrouvableException;
-import com.example.pi_ease.DAO.Repositories.SoldeInsuffisantException;
 import com.example.pi_ease.Services.Interfaces.ITransactionService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.List;
 @RestController
 @AllArgsConstructor
@@ -47,35 +45,24 @@ public class TransactionRest {
 
     }
 
-    @PostMapping("/virement")
-    public ResponseEntity<String> effectuerVirement(@PathVariable Integer idCompteEmetteur, Integer idCompteBeneficiaire, float montant) {
-        try {
-            iTransactionService.effectuerVirement(idCompteEmetteur, idCompteBeneficiaire, montant);
-            return ResponseEntity.ok("Virement effectué avec succès !");
-        } catch (SoldeInsuffisantException | CompteIntrouvableException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fonds insuffisants pour effectuer le virement.");
-        }
-
-
+    @PostMapping
+    @RequestMapping("addVir")
+    public String ajouterVirement(@RequestBody Transaction transaction) {
+        return iTransactionService.ajouterVirement(transaction);
     }
 
-    @PostMapping("/versement")
-    public ResponseEntity<String> effectuerVersement(@PathVariable Integer idCompteBeneficiaire, float montant) {
 
-        iTransactionService.effectuerVersement(idCompteBeneficiaire, montant);
-        return ResponseEntity.ok("Verement effectué avec succès !");
 
+
+    @PostMapping
+    @RequestMapping("addRet")
+    public String ajouterRetrait(@RequestBody Transaction transaction) {
+        return iTransactionService.ajouterRetrait(transaction);
     }
 
-    @PostMapping("/retrait")
-    public ResponseEntity<String> effectuerRetrait(@PathVariable Integer idCompte, float montant) {
-        try {
-            iTransactionService.effectuerRetrait(idCompte, montant);
-            return ResponseEntity.ok("Retrait effectué avec succès !");
-        } catch (SoldeInsuffisantException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fonds insuffisants pour effectuer le retrait.");
-        }
-
-
+    @PostMapping
+    @RequestMapping("addVers")
+    public String ajouterVersement(@RequestBody Transaction transaction) {
+        return iTransactionService.ajouterVersement(transaction);
     }
 }

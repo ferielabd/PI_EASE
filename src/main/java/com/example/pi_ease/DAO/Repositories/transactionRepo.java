@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface transactionRepo extends JpaRepository<Transaction,Integer> {
-    List<Transaction> findByAccountListIdA(int idA);
+
 }

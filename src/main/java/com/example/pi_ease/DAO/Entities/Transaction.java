@@ -28,8 +28,10 @@ public class Transaction implements Serializable {
     Date date_t;
     @Enumerated(EnumType.STRING)
     TypeTransaction typeTransaction;
-    @ManyToMany
-    List<Account> accountList;
+    @ManyToOne
+    private Account expediteur;
+    @ManyToOne
+    private Account destinataire;
 
 
 

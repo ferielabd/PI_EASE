@@ -19,8 +19,8 @@ import java.util.List;
 public class Account implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int idA;
-    float solde;
+    int idAccount;
+    double solde;
     String rib;
     @Temporal(TemporalType.DATE)
     Date openDate;
@@ -28,8 +28,8 @@ public class Account implements Serializable {
     Demande_C demande;
     @Enumerated(EnumType.STRING)
     TypeAccount typeAccount;
-    @ManyToMany(mappedBy = "accountList")
-    List<Transaction> transactionList;
+    //@ManyToMany(mappedBy = "accountList")
+    //List<Transaction> transactionList;
     @OneToOne(mappedBy = "accounts")
     Checks checks;
 
