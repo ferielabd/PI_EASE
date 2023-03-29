@@ -5,7 +5,8 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
-import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -15,7 +16,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Tranche implements Serializable {
+public class Tranche extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,12 +27,17 @@ public class Tranche implements Serializable {
      int nbT;
 
     @Column(name="MONTHLY_AMOUNT", precision = 19 ,scale =2 ,nullable = false)
-    float mon_pay;
+    BigDecimal monPay;
     @Column(name="PAYMENT_DATE",nullable = false)
-    @Temporal(TemporalType.DATE)
-    Date pay_Date;
+    LocalDate payDate;
 
     @ManyToOne
     @JsonIgnore
     Credit creditT;
+
+
+    @Override
+    public int getId() {
+        return 0;
+    }
 }

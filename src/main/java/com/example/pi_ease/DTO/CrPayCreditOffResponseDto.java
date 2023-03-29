@@ -6,9 +6,9 @@ import java.math.BigDecimal;
 
 @Data
 public class CrPayCreditOffResponseDto {
-    private Long id;
-    private Long UserId;
-    private BigDecimal mon_pay;
+    private int id;
+    private int UserId;
+    private BigDecimal monPay;
     private BigDecimal RestApay;
     private CreditStatusType creditStatusType;
 }

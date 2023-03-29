@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 @Data
 public class CrPayInstallmentResponseDto {
-    private Long IdC;
+    private int IdCrPay;
     private BigDecimal paymentAmount;
     private LocalDate PaymentDate;
     private BigDecimal remainingPrincipal;

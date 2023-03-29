@@ -5,11 +5,9 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
 import javax.persistence.*;
-import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -19,44 +17,44 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Credit  implements Serializable {
+public class Credit extends BaseEntity  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_C")
     int IdC;
 
     @NotNull
-    @Temporal(TemporalType.DATE)
     @Column(name = "demand_date")
-    Date D_Date;
+    LocalDate D_Date;
 
 
     @NotNull
     @Column(name = "interest_rate")
-    float taux_interet;
+    BigDecimal tauxInteret;
+
 
     @NotNull
-    @Temporal(TemporalType.DATE)
     @Column(name = "obtaining_Date", precision = 19 ,scale =2 ,nullable = false)
-    Date OB_Date;
+    LocalDate OB_Date;
+
+    @NotNull
+    @Column(name = "due_date", precision = 19 ,scale =2 ,nullable = false)
+    LocalDate dueDate;
 
     @NotNull
     @Min(1)
     @Column(name = "amount", precision = 19 ,scale =2 ,nullable = false)
-    BigDecimal montant;
+    BigDecimal montant_demander;
 
     @Column(name="PRINCIPAL_TO_BE_PAID", precision = 19 ,scale =2 ,nullable = false)
      BigDecimal monPP;
 
     @Column(name="REMAINING_PRINCIPAL", precision = 19 ,scale =2 ,nullable = false)
      BigDecimal RestApay;
-    @Column(name = "State")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "Credit_STATUS_TYPE",length=30,nullable = false)
     CreditStatusType creditStatusType;
 
-    @NotNull
-    @Column(name = "typeCredit")
-    @Enumerated(EnumType.STRING)
-    TypeCredit typeCredit;
     @NotNull
     String attachment;
 
@@ -74,5 +72,8 @@ public class Credit  implements Serializable {
     List<Tranche> trancheList;
 
 
-
+    @Override
+    public int getId() {
+        return 0;
+    }
 }
