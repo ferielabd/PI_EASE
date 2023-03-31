@@ -21,39 +21,32 @@ public class Credit extends BaseEntity  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_C")
-    int IdC;
+    int Id;
 
-    @NotNull
-    @Column(name = "demand_date")
-    LocalDate D_Date;
+    @Column(name="INSTALLMENT_COUNT",nullable = false)
+     Integer installmentCount;
 
+    @Column(name="PRINCIPAL_LOAN_AMOUNT", precision = 19 ,scale =2 ,nullable = false)
+     BigDecimal principalLoanAmount;
 
-    @NotNull
-    @Column(name = "interest_rate")
-    BigDecimal tauxInteret;
+    @Column(name="MONTHLY_INSTALLMENT_AMOUNT", precision = 19 ,scale =2 ,nullable = false)
+     BigDecimal monthlyInstallmentAmount;
 
-
-    @NotNull
-    @Column(name = "obtaining_Date", precision = 19 ,scale =2 ,nullable = false)
-    LocalDate OB_Date;
-
-    @NotNull
-    @Column(name = "due_date", precision = 19 ,scale =2 ,nullable = false)
-    LocalDate dueDate;
-
-    @NotNull
-    @Min(1)
-    @Column(name = "amount", precision = 19 ,scale =2 ,nullable = false)
-    BigDecimal montant_demander;
+    @Column(name="INTEREST_TO_BE_PAID", precision = 19 ,scale =2 ,nullable = false)
+     BigDecimal interestToBePaid;
 
     @Column(name="PRINCIPAL_TO_BE_PAID", precision = 19 ,scale =2 ,nullable = false)
-     BigDecimal monPP;
+     BigDecimal principalToBePaid;
 
     @Column(name="REMAINING_PRINCIPAL", precision = 19 ,scale =2 ,nullable = false)
-     BigDecimal RestApay;
+     BigDecimal remainingPrincipal;
+
+    @Column(name="DUE_DATE",nullable = false)
+     LocalDate dueDate;
+
     @Enumerated(EnumType.STRING)
-    @Column(name = "Credit_STATUS_TYPE",length=30,nullable = false)
-    CreditStatusType creditStatusType;
+    @Column(name ="LOAN_STATUS_TYPE", length=30,nullable = false)
+     CreditStatusType creditStatusType;
 
     @NotNull
     String attachment;

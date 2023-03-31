@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 @Data
 public class CrApplyCreditDto {
 
-    private int nbT;
-    private BigDecimal montant;
+    private Integer installmentCount;
+    private BigDecimal principalLoanAmount;
     private BigDecimal monthlySalary;
 }

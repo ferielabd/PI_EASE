@@ -21,18 +21,16 @@ public class Tranche extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id_T")
-    int Id_T;
+    int id;
 
-    @Column(name="nb_Tranche",nullable = false)
-     int nbT;
 
-    @Column(name="MONTHLY_AMOUNT", precision = 19 ,scale =2 ,nullable = false)
-    BigDecimal monPay;
+    @Column(name="PAYMENT_AMOUNT", precision = 19 ,scale =2 ,nullable = false)
+    private BigDecimal paymentAmount;
+
     @Column(name="PAYMENT_DATE",nullable = false)
-    LocalDate payDate;
+    private LocalDate PaymentDate;
 
     @ManyToOne
-    @JsonIgnore
     Credit creditT;
 
 

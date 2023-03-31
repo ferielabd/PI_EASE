@@ -4,7 +4,6 @@ import com.example.pi_ease.DAO.Entities.CreditStatusType;
 import com.example.pi_ease.DAO.Entities.Tranche;
 import com.example.pi_ease.DTO.*;
 import com.example.pi_ease.Mapper.CreditMapper;
-import com.example.pi_ease.Mapper.TrancheMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +16,7 @@ import java.time.temporal.ChronoUnit;
 @Transactional
 @RequiredArgsConstructor
 public class CreditService {
+
     private final CreditValidationService creditValidationService;
     private final CreditEntityService creditEntityService;
     private final TrancheEntityService trancheEntityService;
@@ -26,148 +26,148 @@ public class CreditService {
     private final BigDecimal ALLOCATION_FEE = BigDecimal.valueOf(45);
     private final int INSTALLMENT_COUNT_LIMIT = 360;
 
-    public CrCalculateCreditResponseDto calculateCredit(int tranche, BigDecimal montant_demander) {
+    public  CrCalculateCreditResponseDto calculateLoan(Integer installment, BigDecimal principalLoanAmount) {
 
-        creditValidationService.controlIsParameterNotNull(tranche,montant_demander);
+        creditValidationService.controlIsParameterNotNull(installment,principalLoanAmount);
 
-        BigDecimal nbTranche = BigDecimal.valueOf(tranche);
+        BigDecimal installmentCount = BigDecimal.valueOf(installment);
 
-        BigDecimal taux_intérêt_total = INTEREST_RATE.add(TAX_RATE);
+        BigDecimal totalInterestRate = INTEREST_RATE.add(TAX_RATE);
 
-        BigDecimal maturity = (nbTranche
+        BigDecimal maturity = (installmentCount
                 .multiply(BigDecimal.valueOf(30))).divide(BigDecimal.valueOf(36500),RoundingMode.CEILING);
 
-        BigDecimal interet_tot = (montant_demander.multiply(taux_intérêt_total)).multiply(maturity).multiply(nbTranche);
-        BigDecimal total_a_payer = montant_demander.add(interet_tot).add(ALLOCATION_FEE);
+        BigDecimal totalInterest = (principalLoanAmount.multiply(totalInterestRate)).multiply(maturity).multiply(installmentCount);
+        BigDecimal totalPayment = principalLoanAmount.add(totalInterest).add(ALLOCATION_FEE);
 
-        BigDecimal monthlyInstallmentAmount = total_a_payer.divide(nbTranche,RoundingMode.CEILING);
+        BigDecimal monthlyInstallmentAmount = totalPayment.divide(installmentCount,RoundingMode.CEILING);
 
-        BigDecimal taux_coût_annuel = taux_intérêt_total.multiply(BigDecimal.valueOf(12));
+        BigDecimal annualCostRate = totalInterestRate.multiply(BigDecimal.valueOf(12));
 
         creditValidationService.controlIsInterestRateNotNegative(INTEREST_RATE);
         creditValidationService.controlIsTaxRateNotNegative(TAX_RATE);
         creditValidationService.controlIsInstallmentAmountPositive(monthlyInstallmentAmount);
-        creditValidationService.controlIsTotalPaymentPositive(total_a_payer);
+        creditValidationService.controlIsTotalPaymentPositive(totalPayment);
 
-        CrCalculateCreditResponseDto crCalculateCreditResponseDto = new CrCalculateCreditResponseDto();
+        CrCalculateCreditResponseDto loaCalculateLoanResponseDto = new CrCalculateCreditResponseDto();
 
-        crCalculateCreditResponseDto.setInterestRate(INTEREST_RATE);
-        crCalculateCreditResponseDto.setTotalInterest(interet_tot);
-        crCalculateCreditResponseDto.setMonthlyInstallmentAmount(monthlyInstallmentAmount);
-        crCalculateCreditResponseDto.setTotalPayment(total_a_payer);
-        crCalculateCreditResponseDto.setAnnualCostRate(taux_coût_annuel);
-        crCalculateCreditResponseDto.setAllocationFee(ALLOCATION_FEE);
+        loaCalculateLoanResponseDto.setInterestRate(INTEREST_RATE);
+        loaCalculateLoanResponseDto.setTotalInterest(totalInterest);
+        loaCalculateLoanResponseDto.setMonthlyInstallmentAmount(monthlyInstallmentAmount);
+        loaCalculateLoanResponseDto.setTotalPayment(totalPayment);
+        loaCalculateLoanResponseDto.setAnnualCostRate(annualCostRate);
+        loaCalculateLoanResponseDto.setAllocationFee(ALLOCATION_FEE);
 
-        return crCalculateCreditResponseDto;
+        return loaCalculateLoanResponseDto;
     }
 
-    public CrCalculateLateFeeResponseDto calculateLateFee(int id) {
+    public CrCalculateLateFeeResponseDto calculateLateFee(Long id) {
 
-        Credit credit = CreditEntityService.getByIdWithControl(id);
+        Credit loaLoan = creditEntityService.getByIdWithControl(id);
 
-        CrCalculateLateFeeResponseDto crCalculateLateFeeResponseDto = calculateLateFeeAndUpdateLoan(credit);
+        CrCalculateLateFeeResponseDto loaCalculateLateFeeResponseDto = calculateLateFeeAndUpdateLoan(loaLoan);
 
-        return crCalculateLateFeeResponseDto;
+        return loaCalculateLateFeeResponseDto;
     }
 
-    private CrCalculateLateFeeResponseDto calculateLateFeeAndUpdateLoan(Credit credit) {
+    private CrCalculateLateFeeResponseDto calculateLateFeeAndUpdateLoan(Credit loaLoan) {
 
-        LocalDate dueDate = credit.getDueDate();
+        LocalDate dueDate = loaLoan.getDueDate();
 
-        Long lateDayCount = CreditValidationService.controlIsLoanDueDatePast(dueDate);
+        Long lateDayCount = creditValidationService.controlIsLoanDueDatePast(dueDate);
 
-        BigDecimal totalCredit = credit.getMontant_demander();
+        BigDecimal totalLoan = loaLoan.getPrincipalLoanAmount();
 
-        BigDecimal Taux_frais_retard = INTEREST_RATE.add((INTEREST_RATE.multiply(BigDecimal.valueOf(30/100))));
-        BigDecimal total_frais_retard = ((totalCredit.multiply(BigDecimal.valueOf(lateDayCount))).multiply(Taux_frais_retard))
+        BigDecimal lateFeeRate = INTEREST_RATE.add((INTEREST_RATE.multiply(BigDecimal.valueOf(30/100))));
+        BigDecimal totalLateFee = ((totalLoan.multiply(BigDecimal.valueOf(lateDayCount))).multiply(lateFeeRate))
                 .divide(BigDecimal.valueOf(30),RoundingMode.UP);
 
-        BigDecimal impôt_sur_interet_retard = total_frais_retard.multiply(TAX_RATE);
+        BigDecimal lateInterestTax = totalLateFee.multiply(TAX_RATE);
 
-        total_frais_retard = total_frais_retard.add(impôt_sur_interet_retard);
+        totalLateFee = totalLateFee.add(lateInterestTax);
 
-        BigDecimal soldeRestant = credit.getRestApay();
-        soldeRestant = soldeRestant.add(total_frais_retard);
+        BigDecimal remainingPrincipal = loaLoan.getRemainingPrincipal();
+        remainingPrincipal = remainingPrincipal.add(totalLateFee);
 
-        CreditValidationService.controlIsInterestRateNotNegative(INTEREST_RATE);
-        CreditValidationService.controlIsLateFeeRateNotNegative(Taux_frais_retard);
-        CreditValidationService.controlIsTotalLateFeePositive(total_frais_retard);
-        CreditValidationService.controlIsLateInterestTaxNotNegative(impôt_sur_interet_retard);
-        CreditValidationService.controlIsPrincipalLoanAmountPositive(soldeRestant);
+        creditValidationService.controlIsInterestRateNotNegative(INTEREST_RATE);
+        creditValidationService.controlIsLateFeeRateNotNegative(lateFeeRate);
+        creditValidationService.controlIsTotalLateFeePositive(totalLateFee);
+        creditValidationService.controlIsLateInterestTaxNotNegative(lateInterestTax);
+        creditValidationService.controlIsPrincipalLoanAmountPositive(remainingPrincipal);
 
-        credit.setCreditStatusType(CreditStatusType.LATE);
-        credit.setRestApay(soldeRestant);
+        loaLoan.setCreditStatusType(CreditStatusType.LATE);
+        loaLoan.setRemainingPrincipal(remainingPrincipal);
 
-        CreditEntityService.save(credit);
+        creditEntityService.save(loaLoan);
 
         CrCalculateLateFeeResponseDto loaCalculateLateFeeResponseDto = new CrCalculateLateFeeResponseDto();
 
-        loaCalculateLateFeeResponseDto.setLateFeeRate(Taux_frais_retard);
-        loaCalculateLateFeeResponseDto.setTotalLateFee(total_frais_retard);
-        loaCalculateLateFeeResponseDto.setLateInterestTax(impôt_sur_interet_retard);
+        loaCalculateLateFeeResponseDto.setLateFeeRate(lateFeeRate);
+        loaCalculateLateFeeResponseDto.setTotalLateFee(totalLateFee);
+        loaCalculateLateFeeResponseDto.setLateInterestTax(lateInterestTax);
         loaCalculateLateFeeResponseDto.setLateDayCount(lateDayCount);
 
         return loaCalculateLateFeeResponseDto;
     }
 
-    public CreditDto findLoanById(int id) {
+    public CreditDto findLoanById(Long id) {
 
-        Credit credit = CreditEntityService.getByIdWithControl(id);
+        Credit credit = creditEntityService.getByIdWithControl(id);
 
         updateLoanIfDueDatePast(credit);
-        credit = CreditEntityService.getByIdWithControl(id);
+        credit =creditEntityService.getByIdWithControl(id);
 
-        CreditDto creditDto = CreditMapper.INSTANCE.convertToCreditDto(credit);
+        CreditDto loaLoanDto = CreditMapper.INSTANCE.convertToCreditDto(credit);
 
-        return creditDto;
+        return loaLoanDto;
     }
 
-    public CreditDto applyLoan(CrApplyCreditDto applyCreditDto) {
+    public CreditDto applyLoan(CrApplyCreditDto loaLoanApplyLoanDto) {
 
-        CreditValidationService.controlIsParameterNotNull(applyCreditDto);
+        creditValidationService.controlIsParameterNotNull(loaLoanApplyLoanDto);
 
-        //int customerId = CreditEntityService.getCurrentCustomerId();
-        BigDecimal principalLoanAmount = applyCreditDto.getMontant();
-        Integer nbTranche = applyCreditDto.getNbT();
-        BigDecimal nbT = BigDecimal.valueOf(nbTranche);
-        BigDecimal salaireMonsuel = applyCreditDto.getMonthlySalary();
+      //  Long userId = CreditEntityService.getCurrentUser();
+        BigDecimal principalLoanAmount = loaLoanApplyLoanDto.getPrincipalLoanAmount();
+        Integer installment = loaLoanApplyLoanDto.getInstallmentCount();
+        BigDecimal installmentCount = BigDecimal.valueOf(installment);
+        BigDecimal monthlySalary = loaLoanApplyLoanDto.getMonthlySalary();
 
-        Credit credit = CreditMapper.INSTANCE.convertToCredit(applyCreditDto);
-        Tranche tranche= TrancheMapper.INSTANCE.convertToTranche(applyCreditDto);
-        BigDecimal total_taux_interet = INTEREST_RATE.add(TAX_RATE);
+        Credit credit = CreditMapper.INSTANCE.convertToCredit(loaLoanApplyLoanDto);
 
-        BigDecimal maturity = (nbT
+        BigDecimal totalInterestRate = INTEREST_RATE.add(TAX_RATE);
+
+        BigDecimal maturity = (installmentCount
                 .multiply(BigDecimal.valueOf(30))).divide(BigDecimal.valueOf(36500),RoundingMode.CEILING);
-        BigDecimal totalInterest = (principalLoanAmount.multiply(total_taux_interet)).multiply(maturity).multiply(nbT);
+        BigDecimal totalInterest = (principalLoanAmount.multiply(totalInterestRate)).multiply(maturity).multiply(installmentCount);
 
         BigDecimal totalPayment = principalLoanAmount.add(totalInterest).add(ALLOCATION_FEE);
 
-        BigDecimal monthlyInstallmentAmount = totalPayment.divide(nbT,RoundingMode.CEILING);
+        BigDecimal monthlyInstallmentAmount = totalPayment.divide(installmentCount,RoundingMode.CEILING);
 
-        BigDecimal maxInstallmentAmount = salaireMonsuel.multiply(BigDecimal.valueOf(0.5));
+        BigDecimal maxInstallmentAmount = monthlySalary.multiply(BigDecimal.valueOf(0.5));
         BigDecimal maxLoanAmount = (maxInstallmentAmount
-                .multiply(nbT))
+                .multiply(installmentCount))
                 .multiply(BigDecimal.valueOf(0.80));
 
-        LocalDate dueDate = LocalDate.now().plusMonths(nbTranche);
+        LocalDate dueDate = LocalDate.now().plusMonths(installment);
 
-        CreditValidationService.controlIsInterestRateNotNegative(INTEREST_RATE);
-        CreditValidationService.controlIsMonthlyInstallmentAmountPositive(monthlyInstallmentAmount);
-        CreditValidationService.controlIsInterestAmountNotNegative(totalInterest);
-        CreditValidationService.controlIsPrincipalLoanAmountPositive(principalLoanAmount);
-        CreditValidationService.controlIsLoanAmountNotGreaterThanMaxLoanAmount(
+        creditValidationService.controlIsInterestRateNotNegative(INTEREST_RATE);
+        creditValidationService.controlIsMonthlyInstallmentAmountPositive(monthlyInstallmentAmount);
+        creditValidationService.controlIsInterestAmountNotNegative(totalInterest);
+        creditValidationService.controlIsPrincipalLoanAmountPositive(principalLoanAmount);
+        creditValidationService.controlIsLoanAmountNotGreaterThanMaxLoanAmount(
                 principalLoanAmount, maxLoanAmount);
-        CreditValidationService.controlIsInstallmentCountNotGreaterThanInstallmentCountLimit(nbTranche,INSTALLMENT_COUNT_LIMIT);
+        creditValidationService.controlIsInstallmentCountNotGreaterThanInstallmentCountLimit(installment,INSTALLMENT_COUNT_LIMIT);
 
-       // Credit.setCustomerId(customerId);
-        tranche.setMonPay(monthlyInstallmentAmount);
-        credit.setTauxInteret(totalInterest);
-        credit.setMonPP(principalLoanAmount);
-        credit.setRestApay(principalLoanAmount);
+       // credit.setCustomerId(customerId);
+        credit.setMonthlyInstallmentAmount(monthlyInstallmentAmount);
+        credit.setInterestToBePaid(totalInterest);
+        credit.setPrincipalToBePaid(principalLoanAmount);
+        credit.setRemainingPrincipal(principalLoanAmount);
         credit.setDueDate(dueDate);
         credit.setCreditStatusType(CreditStatusType.CONTINUING);
 
-        credit = CreditEntityService.save(credit);
+        credit = creditEntityService.save(credit);
 
         CreditDto creditDto = CreditMapper.INSTANCE.convertToCreditDto(credit);
 
@@ -175,89 +175,89 @@ public class CreditService {
     }
 
 
-    public CrPayInstallmentResponseDto payInstallment(int id) {
+    public CrPayInstallmentResponseDto payInstallment(Long id) {
 
-        Credit credit = CreditEntityService.getByIdWithControl(id);
-        Tranche tranche=TrancheEntityService.getByIdWithControl(id);
+        Credit credit = creditEntityService.getByIdWithControl(id);
+
         updateLoanIfDueDatePast(credit);
 
-        BigDecimal tranchePay = tranche.getMonPay();
-        BigDecimal solderestant = credit.getRestApay();
+        BigDecimal installmentAmount = credit.getMonthlyInstallmentAmount();
+        BigDecimal remainingPrincipal = credit.getRemainingPrincipal();
 
-        solderestant = solderestant.subtract(tranchePay);
+        remainingPrincipal = remainingPrincipal.subtract(installmentAmount);
 
-       CreditValidationService.controlIsRemainingPrincipalNotNegative(solderestant);
-        CreditValidationService.controlIsInstallmentAmountPositive(tranchePay);
+        creditValidationService.controlIsRemainingPrincipalNotNegative(remainingPrincipal);
+        creditValidationService.controlIsInstallmentAmountPositive(installmentAmount);
 
-        credit.setRestApay(solderestant);
+        credit.setRemainingPrincipal(remainingPrincipal);
 
-        Tranche tranche1 = new Tranche();
+        Tranche tranche = new Tranche();
 
-        tranche1.setId_T(id);
-        tranche1.setMonPay(tranchePay);
-        tranche1.getPayDate(LocalDate.now());
+       // tranche.setLoanId(id);
+        tranche.setPaymentAmount(installmentAmount);
+        tranche.setPaymentDate(LocalDate.now());
 
-        credit = CreditEntityService.save(credit);
-        tranche1 = TrancheEntityService.save(tranche1);
+        credit = creditEntityService.save(credit);
+        tranche = trancheEntityService.save(tranche);
 
-        CrPayInstallmentResponseDto crPayInstallmentResponseDto = convertToLoaPayInstallmentResponseDto(credit, tranche);
+        CrPayInstallmentResponseDto loaPayInstallmentResponseDto = convertToLoaPayInstallmentResponseDto(credit, tranche);
 
-        return crPayInstallmentResponseDto;
+        return loaPayInstallmentResponseDto;
     }
 
-    private void updateLoanIfDueDatePast(Credit loaLoan) {
+    private void updateLoanIfDueDatePast(Credit credit) {
 
-        LocalDate dueDate = loaLoan.getDueDate();
+        LocalDate dueDate = credit.getDueDate();
 
         long lateDayCount = ChronoUnit.DAYS.between(dueDate, LocalDate.now());
 
         if(lateDayCount > 0 ){
-            calculateLateFeeAndUpdateLoan(loaLoan);
+            calculateLateFeeAndUpdateLoan(credit);
         }
     }
 
-    private CrPayInstallmentResponseDto  convertToLoaPayInstallmentResponseDto(Credit credit, Tranche tranche){
+    private CrPayInstallmentResponseDto  convertToLoaPayInstallmentResponseDto(Credit loaLoan, Tranche loanPayment){
 
-        int idTranche = tranche.getId_T();
-        BigDecimal paymentAmount = tranche.getMonPay();
-        LocalDate PaymentDate = tranche.getPayDate();
+     //  !!!! Long loanId = loanPayment.getLoanId();
+        BigDecimal paymentAmount = loanPayment.getPaymentAmount();
+        LocalDate PaymentDate = loanPayment.getPaymentDate();
 
-        BigDecimal remainingPrincipal = credit.getRestApay();
-        LocalDate dueDate = credit.getDueDate();
+        BigDecimal remainingPrincipal = loaLoan.getRemainingPrincipal();
+        LocalDate dueDate = loaLoan.getDueDate();
 
-        CrPayInstallmentResponseDto crPayInstallmentResponseDto = new CrPayInstallmentResponseDto();
+        CrPayInstallmentResponseDto loaPayInstallmentResponseDto = new CrPayInstallmentResponseDto();
 
-        crPayInstallmentResponseDto.setIdCrPay(idTranche);
-        crPayInstallmentResponseDto.setPaymentAmount(paymentAmount);
-        crPayInstallmentResponseDto.setPaymentDate(PaymentDate);
-        crPayInstallmentResponseDto.setRemainingPrincipal(remainingPrincipal);
-        crPayInstallmentResponseDto.setDueDate(dueDate);
+      //!!!!!!!!  loaPayInstallmentResponseDto.setLoanId(loanId);
+        loaPayInstallmentResponseDto.setPaymentAmount(paymentAmount);
+        loaPayInstallmentResponseDto.setPaymentDate(PaymentDate);
+        loaPayInstallmentResponseDto.setRemainingPrincipal(remainingPrincipal);
+        loaPayInstallmentResponseDto.setDueDate(dueDate);
 
-        return crPayInstallmentResponseDto;
+        return loaPayInstallmentResponseDto;
     }
 
-    public CrPayCreditOffResponseDto payLoanOff(int id) {
+    public CrPayCreditOffResponseDto payLoanOff(Long id) {
 
-        Credit credit = CreditEntityService.getByIdWithControl(id);
+        Credit loaLoan = creditEntityService.getByIdWithControl(id);
 
-        updateLoanIfDueDatePast(credit);
+        updateLoanIfDueDatePast(loaLoan);
 
-        BigDecimal paidAmount = credit.getRestApay();
+        BigDecimal paidAmount = loaLoan.getRemainingPrincipal();
         BigDecimal remainingPrincipal = BigDecimal.ZERO;
 
-        CreditValidationService.controlIsLoanNotAlreadyPaidOff(credit);
-        CreditValidationService.controlIsRemainingPrincipalNotNegative(remainingPrincipal);
+        creditValidationService.controlIsLoanNotAlreadyPaidOff(loaLoan);
+        creditValidationService.controlIsRemainingPrincipalNotNegative(remainingPrincipal);
 
-        credit.setRestApay(remainingPrincipal);
-        credit.setCreditStatusType(CreditStatusType.PAID);
+        loaLoan.setRemainingPrincipal(remainingPrincipal);
+        loaLoan.setCreditStatusType(CreditStatusType.PAID);
 
-        credit = CreditEntityService.save(credit);
+        loaLoan = creditEntityService.save(loaLoan);
 
-        CrPayCreditOffResponseDto crPayCreditOffResponseDto = CrPayCreditOffResponseDto.INSTANCE.convertToLoaPayLoanOffResponseDto(credit);
+        CrPayCreditOffResponseDto loaPayLoanOffResponseDto = CreditMapper.INSTANCE.convertToCrPayCreditOffResponseDto(loaLoan);
 
-        crPayCreditOffResponseDto.setRestApay(remainingPrincipal);
-        crPayCreditOffResponseDto.setMonPay(paidAmount);
+        loaPayLoanOffResponseDto.setRemainingAmount(remainingPrincipal);
+        loaPayLoanOffResponseDto.setPaidAmount(paidAmount);
 
-        return crPayCreditOffResponseDto;
+        return loaPayLoanOffResponseDto;
     }
 }

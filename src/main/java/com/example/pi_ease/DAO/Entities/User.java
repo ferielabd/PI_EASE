@@ -20,7 +20,10 @@ import java.util.List;
 public class User implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    long id;
     long cin;
+    String username;
 
     String First_name;
 
@@ -29,12 +32,13 @@ public class User implements Serializable {
     String Adress;
 
     long phone;
+    long solde;
     @Temporal(TemporalType.DATE)
-    Date BirthDate;
+    Date birthDate;
 
     String mail;
 
-    String pwd;
+    String password;
 
     @ManyToOne
     Role role;

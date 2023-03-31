@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public abstract class BaseEntityService<E extends BaseEntity, D extends JpaRepository<E, Integer>> {
+public abstract class BaseEntityService<E extends BaseEntity, D extends JpaRepository<E, Long>> {
 
     private final D dao;
 
@@ -36,7 +36,7 @@ public abstract class BaseEntityService<E extends BaseEntity, D extends JpaRepos
         return dao.findAll();
     }
 
-    public  Optional<E> findById(int id){
+    public  Optional<E> findById(long id){
 
         return dao.findById(id);
     }
@@ -73,7 +73,7 @@ public abstract class BaseEntityService<E extends BaseEntity, D extends JpaRepos
         dao.delete(entity);
     }
 
-    public E getByIdWithControl(int id) {
+    public E getByIdWithControl(long id) {
 
         Optional<E> entityOptional = findById(id);
 
@@ -113,7 +113,7 @@ public abstract class BaseEntityService<E extends BaseEntity, D extends JpaRepos
         return page;
     }
 
-    public boolean existsById(int id){
+    public boolean existsById(long id){
         return dao.existsById(id);
     }
 

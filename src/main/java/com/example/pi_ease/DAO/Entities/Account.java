@@ -27,7 +27,7 @@ public class Account implements Serializable {
     String state;
     @Enumerated(EnumType.STRING)
     TypeAccount typeAccount;
-    @ManyToMany(mappedBy = "accountList")
+    @ManyToMany(mappedBy = "accountList",cascade = CascadeType.ALL)
     List<Transaction> transactionList;
     @OneToOne(mappedBy = "accounts")
     Checks checks;
