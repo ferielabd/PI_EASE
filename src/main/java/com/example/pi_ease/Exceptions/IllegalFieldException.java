@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class IllegalFieldException extends GenBusinessException{
 
     public IllegalFieldException(BaseErrorMessage message) {
+
         super(message);
     }
 }

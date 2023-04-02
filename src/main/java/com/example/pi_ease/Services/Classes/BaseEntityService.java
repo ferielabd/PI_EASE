@@ -4,6 +4,7 @@ import com.example.pi_ease.DAO.Entities.BaseAdditionalFields;
 import com.example.pi_ease.DAO.Entities.BaseEntity;
 import com.example.pi_ease.DAO.Entities.GenErrorMessage;
 import com.example.pi_ease.Exceptions.ItemNotFoundException;
+import com.example.pi_ease.RestControllers.AuthController;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -23,13 +24,13 @@ public abstract class BaseEntityService<E extends BaseEntity, D extends JpaRepos
     private static final Integer DEFAULT_PAGE = 0;
     private static final Integer DEFAULT_SIZE = 10;
 
-   // private AuthenticationService authenticationService;
-//important rihem!!!!!!!!!!!!!!!!!!!!!!!!!!
+   private AuthController authenticationService;
+
     /** For Circular dependency*/
-   /* @Autowired
-    public void setAuthenticationService(@Lazy AuthenticationService authenticationService) {
+   @Autowired
+    public void setAuthenticationService(@Lazy AuthController authenticationService) {
         this.authenticationService = authenticationService;
-    }*/
+    }
 
     public List<E> findAll(){
 
@@ -120,9 +121,9 @@ public abstract class BaseEntityService<E extends BaseEntity, D extends JpaRepos
     public D getDao() {
         return dao;
     }
-//important rihem!!!!!!!!!!!!!!!!!!!!!!!!!!
-  /*  public Long getCurrentCustomerId() {
-        Long currentCustomerId = authenticationService.getCurrentCustomerId();
+
+    /*public Long getCurrentCustomerId() {
+        Long currentCustomerId = authenticationService.getCurrentUser();
         return currentCustomerId;
     }*/
 

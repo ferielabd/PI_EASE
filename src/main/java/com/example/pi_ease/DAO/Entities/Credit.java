@@ -63,7 +63,8 @@ public class Credit extends BaseEntity  {
     @OneToMany(mappedBy = "creditT",cascade = CascadeType.ALL)
 
     List<Tranche> trancheList;
-
+    @ManyToOne
+    CreditHistory creditHistory;
 
     @Override
     public int getId() {

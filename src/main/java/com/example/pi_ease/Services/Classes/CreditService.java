@@ -2,8 +2,10 @@ package com.example.pi_ease.Services.Classes;
 import com.example.pi_ease.DAO.Entities.Credit;
 import com.example.pi_ease.DAO.Entities.CreditStatusType;
 import com.example.pi_ease.DAO.Entities.Tranche;
+import com.example.pi_ease.DAO.Entities.User;
 import com.example.pi_ease.DTO.*;
 import com.example.pi_ease.Mapper.CreditMapper;
+import com.example.pi_ease.RestControllers.AuthController;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,9 +22,15 @@ public class CreditService {
     private final CreditValidationService creditValidationService;
     private final CreditEntityService creditEntityService;
     private final TrancheEntityService trancheEntityService;
+    private final AuthController authController;
 
-    private final BigDecimal INTEREST_RATE = BigDecimal.valueOf(1.59/100);
-    private final BigDecimal TAX_RATE = BigDecimal.valueOf(20/100); //KKDF + BSMV
+
+    private static final int MINIMUM_AGE = 18;
+    private static final int MAXIMUM_AGE = 45;
+    private static final double MINIMUM_SALARY = 1500.0;
+
+    private final BigDecimal INTEREST_RATE = BigDecimal.valueOf(8.02/100);
+    private final BigDecimal TAX_RATE = BigDecimal.valueOf(20/100);
     private final BigDecimal ALLOCATION_FEE = BigDecimal.valueOf(45);
     private final int INSTALLMENT_COUNT_LIMIT = 360;
 
@@ -126,7 +134,7 @@ public class CreditService {
 
         creditValidationService.controlIsParameterNotNull(loaLoanApplyLoanDto);
 
-      //  Long userId = CreditEntityService.getCurrentUser();
+      // Long userId = authController.getCurrentUser();
         BigDecimal principalLoanAmount = loaLoanApplyLoanDto.getPrincipalLoanAmount();
         Integer installment = loaLoanApplyLoanDto.getInstallmentCount();
         BigDecimal installmentCount = BigDecimal.valueOf(installment);
@@ -260,4 +268,8 @@ public class CreditService {
 
         return loaPayLoanOffResponseDto;
     }
+
+
+
+
 }

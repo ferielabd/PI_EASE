@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -32,9 +33,9 @@ public class User implements Serializable {
     String Adress;
 
     long phone;
-    long solde;
+    long salaire;
     @Temporal(TemporalType.DATE)
-    Date birthDate;
+    LocalDate birthDate;
 
     String mail;
 

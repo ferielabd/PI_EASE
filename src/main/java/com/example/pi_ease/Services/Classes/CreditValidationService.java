@@ -18,8 +18,7 @@ import java.time.temporal.ChronoUnit;
 @RequiredArgsConstructor
 public class CreditValidationService {
 
- //   private final CusCustomerEntityService cusCustomerEntityService;
-//UserRihem !!!!!!!!!!!!!!!!!!!!!!!!
+
 
     private CreditErrorMessage creditErrorMessage;
  public void controlIsParameterNotNull(Integer installmentCount, BigDecimal principalLoanAmount) {
@@ -96,15 +95,6 @@ public class CreditValidationService {
         }
     }
 
-   /* public void controlIsCustomerExist(Long customerId) {
-
-        boolean isExist = cusCustomerEntityService.existsById(customerId);
-
-        if (!isExist){
-
-            throw new ItemNotFoundException(CreditErrorMessage.CUSTOMER_NOT_FOUND);
-        }
-    }!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 
     public void controlIsMonthlyInstallmentAmountPositive(BigDecimal monthlyInstallmentAmount) {
 

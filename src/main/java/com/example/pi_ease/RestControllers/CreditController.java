@@ -1,6 +1,7 @@
 package com.example.pi_ease.RestControllers;
 
 
+
 import com.example.pi_ease.DTO.*;
 import com.example.pi_ease.Services.Classes.CreditService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,7 +15,7 @@ import java.math.BigDecimal;
 @RequestMapping("/Credit")
 public class CreditController {
 
-    private final CreditService service;
+     CreditService service;
 
     @Operation(
             tags = "Loan Controller",
@@ -93,4 +94,8 @@ public class CreditController {
 
         return ResponseEntity.ok(RestResponse.of(loaPayLoanOffResponseDto));
     }
+
+
+
 }
+

@@ -1,5 +1,6 @@
 package com.example.pi_ease.DAO.Entities;
 
+import com.example.pi_ease.Services.Interfaces.BaseModel;
 import lombok.Getter;
 import lombok.Setter;
 
