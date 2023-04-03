@@ -1,6 +1,7 @@
 package com.example.pi_ease.RestController;
 
 import com.example.pi_ease.DAO.Entities.Transaction;
+import com.example.pi_ease.Services.Classes.EmailServices;
 import com.example.pi_ease.Services.Interfaces.ITransactionService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import java.util.List;
 
 public class TransactionRest {
     private ITransactionService iTransactionService;
+    private EmailServices emailServices;
 
     @GetMapping("/afficherTransaction")
     public List<Transaction> afficher() {
@@ -64,5 +66,14 @@ public class TransactionRest {
     @RequestMapping("addVers")
     public String ajouterVersement(@RequestBody Transaction transaction) {
         return iTransactionService.ajouterVersement(transaction);
+    }
+    @GetMapping("/{montant}")
+    public double convertirEuroEnDinar(@PathVariable double montant) {
+        return iTransactionService.convertirEuroEnDinar(montant);
+    }
+    @PostMapping("/message")
+    String sendEmailMessage() {
+        this.emailServices.sendSimpleEmail("ltifi00ibtissem@gmail.com", "etat de transaction", "\"Bonjour \" + user.getFirst_name() + \",\\n\\nNous vous informons que votre transaction a été effectuée avec succès.\\n\\nCordialement,\\nL'équipe de notre entreprise\"");
+        return "Message sent";
     }
 }

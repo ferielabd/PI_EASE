@@ -25,7 +25,7 @@ public class Account implements Serializable {
     @Temporal(TemporalType.DATE)
     Date openDate;
     String state;
-    Demande_C demande;
+
     @Enumerated(EnumType.STRING)
     TypeAccount typeAccount;
     //@ManyToMany(mappedBy = "accountList")

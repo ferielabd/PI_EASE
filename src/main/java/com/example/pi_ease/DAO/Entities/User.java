@@ -56,7 +56,7 @@ public class User implements Serializable {
     @OneToMany
     List<Transaction> transactionE;
 
-    @OneToMany
+    @OneToMany(mappedBy = "user")
     List<Transaction> transactionR;
     @ManyToMany(mappedBy = "listUsersI")
     List<Project> listProjectI;

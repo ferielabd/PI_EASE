@@ -17,4 +17,6 @@ public interface ITransactionService {
    String ajouterVirement(Transaction transaction);
     String ajouterRetrait(Transaction transaction);
     String ajouterVersement(Transaction transaction);
+
+    double convertirEuroEnDinar(double montant);
 }

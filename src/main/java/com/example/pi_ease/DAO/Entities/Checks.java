@@ -22,4 +22,5 @@ public class Checks implements Serializable {
     TypeCheck typeCheck;
     @OneToOne
     Account accounts;
+    Demande_C demande;
 }

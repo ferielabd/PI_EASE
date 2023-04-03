@@ -32,6 +32,9 @@ public class Transaction implements Serializable {
     private Account expediteur;
     @ManyToOne
     private Account destinataire;
+    @ManyToOne
+    User user;
+
 
 
 
