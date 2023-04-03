@@ -73,7 +73,7 @@ public class TransactionRest {
     }
     @PostMapping("/message")
     String sendEmailMessage() {
-        this.emailServices.sendSimpleEmail("ltifi00ibtissem@gmail.com", "etat de transaction", "\"Bonjour \" + user.getFirst_name() + \",\\n\\nNous vous informons que votre transaction a été effectuée avec succès.\\n\\nCordialement,\\nL'équipe de notre entreprise\"");
+        this.emailServices.sendSimpleEmail(5);
         return "Message sent";
     }
 }

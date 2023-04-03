@@ -15,4 +15,6 @@ public interface ICheckService {
     void delete(Checks c);
     List<Checks> addAll(List<Checks> list);
     void deleteAll(List<Checks> list);
+
+    List<Checks> getChecks();
 }

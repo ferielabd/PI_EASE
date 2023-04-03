@@ -19,13 +19,14 @@ public class CheckService implements ICheckService {
         return checkrepo.save(c);
     }
 
+
     @Override
     public Checks edit(Checks c) {
         return checkrepo.save(c);
     }
 
     @Override
-    public List<Checks> selectAll() {
+    public  List<Checks> selectAll() {
         return checkrepo.findAll();
     }
 
@@ -55,5 +56,8 @@ public class CheckService implements ICheckService {
     public void deleteAll(List<Checks> list) {
         checkrepo.deleteAll(list);
 
+    }
+    public List<Checks> getChecks(){
+        return  checkrepo.findAll();
     }
 }

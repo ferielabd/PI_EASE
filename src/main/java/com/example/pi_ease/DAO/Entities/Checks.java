@@ -10,8 +10,8 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
+//@AllArgsConstructor
+//@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Checks implements Serializable {
     @Id
@@ -23,4 +23,11 @@ public class Checks implements Serializable {
     @OneToOne
     Account accounts;
     Demande_C demande;
+
+
+
+    public Checks(int numC,Account accounts) {
+        this.numC = numC;
+        this.accounts = accounts;
+    }
 }
