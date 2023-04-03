@@ -32,7 +32,8 @@ public class User implements Serializable {
     Date BirthDate;
 
     String mail;
-
+    Boolean active = true;
+    int count;
     String pwd;
 
     @ManyToOne

@@ -19,18 +19,25 @@ public class Claim implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="idClaim")
-     int idClaim;
+    Integer idClaim;
     @Temporal (TemporalType.DATE)
-     Date DateClaim;
+    Date dateClaim;
     @Temporal (TemporalType.DATE)
-     Date DateTraite;
+    Date dateTraite;
 
-     Boolean TraiteClaim;
+    Boolean TraiteClaim;
     @Enumerated(EnumType.STRING)
-    TypeCL typeCL;
-
-    String DescClaim;
+    TypeClaim type;
+    String descClaim;
+    @Lob
+    @Column(columnDefinition = "MEDIUMBLOB")
     String AttachClaim;
-  @ManyToOne(cascade=CascadeType.ALL)
-    User userClaim;
+    String RefTR;
+    String RefCR;
+    String refclaim ;
+
+    @ManyToOne(cascade=CascadeType.ALL)
+    private User user;
+
+
 }
