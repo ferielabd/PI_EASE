@@ -19,7 +19,7 @@ public class Credit  implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_C")
-    int IdC;
+    int idC;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "demand_date")

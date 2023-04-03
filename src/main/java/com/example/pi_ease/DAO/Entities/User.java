@@ -48,8 +48,8 @@ public class User implements Serializable {
   @OneToMany(mappedBy = "userCredit")
     List<Credit> creditList;
 
-    @OneToMany(mappedBy = "userClaim")
-    List<Claim> claimList;
+   /* @OneToMany(mappedBy = "userc")
+    List<Claim> claimList;*/
 
     @ManyToMany(mappedBy = "userAcc")
     List<Account>  accountList;

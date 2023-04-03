@@ -47,7 +47,7 @@ public class ClaimService implements IclaimService {
         Calendar cal = Calendar.getInstance();
         Date datetraite=cal.getTime();
         cl.setDateTraite(datetraite);
-        String user =cl .getUser().getMail();
+        String user =cl .getUserc().getMail();
         claimRepo.save(cl);
         this.emailService.sendSimpleEmail(user, "Status of your claim", "your complaint is processed");
 
@@ -88,8 +88,8 @@ public class ClaimService implements IclaimService {
         Date dateclaim=cal.getTime();
         cl.setDateClaim(dateclaim);
 
-        User user = userRepository.findById(4).get();
-        cl.setUser(user);
+        User user = userRepository.findById(9758826L).get();
+        cl.setUserc(user);
         claimRepo.save(cl);
         cl.setRefclaim(String.valueOf(cl.getIdClaim())+"."+cl.getDateClaim());
         if ((idt != 0 )&& (idc == 0)){

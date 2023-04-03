@@ -37,7 +37,7 @@ public class Claim implements Serializable {
     String refclaim ;
 
     @ManyToOne(cascade=CascadeType.ALL)
-    private User user;
+    private User userc;
 
 
 }

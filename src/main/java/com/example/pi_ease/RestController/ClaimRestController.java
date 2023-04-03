@@ -137,15 +137,17 @@ public class ClaimRestController {
         font.setColor(Color.WHITE);
         cell.setPhrase(new Phrase("Date Claim", font));
         table.addCell(cell);
-        cell.setPhrase(new Phrase("Date trait", font));
-        table.addCell(cell);
-        cell.setPhrase(new Phrase("Attachment", font));
-        table.addCell(cell);
+       // cell.setPhrase(new Phrase("Date trait", font));
+       // table.addCell(cell);
+        //cell.setPhrase(new Phrase("Attachment", font));
+        //table.addCell(cell);
         cell.setPhrase(new Phrase("Desc Claim", font));
         table.addCell(cell);
-        cell.setPhrase(new Phrase("Type", font));
+        cell.setPhrase(new Phrase("User", font));
         table.addCell(cell);
-
+        cell.setPhrase(new Phrase("Credit", font));
+        table.addCell(cell);cell.setPhrase(new Phrase("Transaction", font));
+        table.addCell(cell);
         //table.addCell("User");
 
 
@@ -154,11 +156,13 @@ public class ClaimRestController {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             String dateString = dateFormat.format(myObject.getDateClaim());
             table.addCell(dateString);
-            String dateString1 = dateFormat.format(myObject.getDateTraite());
-            table.addCell(dateString1);
-            table.addCell(myObject.getAttachClaim());
+            //String dateString1 = dateFormat.format(myObject.getDateTraite());
+            //table.addCell(dateString1);
+            //table.addCell(myObject.getAttachClaim());
             table.addCell(myObject.getDescClaim());
-            table.addCell(String.valueOf(myObject.getType()));
+            table.addCell(myObject.getUserc().getFirst_name());
+            table.addCell(myObject.getRefCR());
+            table.addCell(myObject.getRefTR());
             // table.addCell(String.valueOf(myObject.getUser()));
 
 
