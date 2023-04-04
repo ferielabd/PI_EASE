@@ -6,7 +6,6 @@ import com.example.pi_ease.DAO.Entities.User;
 import com.example.pi_ease.DTO.*;
 import com.example.pi_ease.Mapper.CreditMapper;
 import com.example.pi_ease.RestControllers.AuthController;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
@@ -16,7 +15,7 @@ import java.time.temporal.ChronoUnit;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
+
 public class CreditService {
 
     private final CreditValidationService creditValidationService;
@@ -24,7 +23,12 @@ public class CreditService {
     private final TrancheEntityService trancheEntityService;
     private final AuthController authController;
 
-
+    public CreditService(CreditValidationService creditValidationService, CreditEntityService creditEntityService, TrancheEntityService trancheEntityService, AuthController authController) {
+        this.creditValidationService = creditValidationService;
+        this.creditEntityService = creditEntityService;
+        this.trancheEntityService = trancheEntityService;
+        this.authController = authController;
+    }
 
     private final BigDecimal INTEREST_RATE = BigDecimal.valueOf(8.02/100);
     private final BigDecimal TAX_RATE = BigDecimal.valueOf(20/100);

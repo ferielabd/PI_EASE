@@ -1,19 +1,23 @@
 package com.example.pi_ease.DTO;
 
-import com.example.pi_ease.DAO.CreditHistoryType;
+import com.example.pi_ease.DAO.Entities.CreditHistoryType;
 import com.example.pi_ease.DAO.Entities.CreditHistory;
 import com.example.pi_ease.DAO.Entities.User;
 import com.example.pi_ease.RestControllers.AuthController;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CreditScoringLibrary {
-     AuthController authController;
-     User user=authController.getCurrentUser();
+public class CreditScoringLibrary implements InitializingBean {
+
+    @Autowired
+    AuthController authController;
+    User user;
 
     public double calculateCreditScore(CreditHistory creditHistory) {
         double score = 0;
-         creditHistory.setIncome(user.getSalaire());
+        // creditHistory.setIncome(user.getSalaire());
         // Calcule le score en fonction des attributs de la demande de crédit
         score += creditHistory.getIncome() / 1000;
 
@@ -32,5 +36,10 @@ public class CreditScoringLibrary {
         }
 
         return score;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        this.user = authController.getCurrentUser();
     }
 }

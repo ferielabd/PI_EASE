@@ -6,42 +6,48 @@ import com.example.pi_ease.DAO.Entities.GenErrorMessage;
 import com.example.pi_ease.DAO.Entities.User;
 import com.example.pi_ease.Exceptions.ItemNotFoundException;
 import com.example.pi_ease.RestControllers.AuthController;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public abstract class BaseEntityService<E extends BaseEntity, D extends JpaRepository<E, Long>> {
 
-    private final D dao;
+    private D dao;
 
+    private AuthController authenticationService;
 
+    public BaseEntityService(){
+    }
 
-   private AuthController authenticationService;
+    public void setDao(D dao) {
+        this.dao = dao;
+    }
 
-    /** For Circular dependency*/
-   @Autowired
+    /**
+     * For Circular dependency
+     */
+    @Autowired
     public void setAuthenticationService(@Lazy AuthController authenticationService) {
         this.authenticationService = authenticationService;
     }
 
-    public List<E> findAll(){
+    public List<E> findAll() {
 
         return dao.findAll();
     }
 
-    public  Optional<E> findById(long id){
+    public Optional<E> findById(long id) {
 
         return dao.findById(id);
     }
 
-    public E save(E entity){
+    public E save(E entity) {
 
         setAdditionalFields(entity);
 
@@ -55,13 +61,13 @@ public abstract class BaseEntityService<E extends BaseEntity, D extends JpaRepos
         BaseAdditionalFields baseAdditionalFields = entity.getBaseAdditionalFields();
 
 
-        if (baseAdditionalFields == null){
+        if (baseAdditionalFields == null) {
 
             baseAdditionalFields = new BaseAdditionalFields();
             entity.setBaseAdditionalFields(baseAdditionalFields);
         }
 
-        if (entity.getId() == 0){
+        if (entity.getId() == 0) {
 
             baseAdditionalFields.setCreateDate(new Date());
         }
@@ -69,7 +75,7 @@ public abstract class BaseEntityService<E extends BaseEntity, D extends JpaRepos
         baseAdditionalFields.setUpdateDate(new Date());
     }
 
-    public void delete(E entity){
+    public void delete(E entity) {
         dao.delete(entity);
     }
 
@@ -78,7 +84,7 @@ public abstract class BaseEntityService<E extends BaseEntity, D extends JpaRepos
         Optional<E> entityOptional = findById(id);
 
         E entity;
-        if (entityOptional.isPresent()){
+        if (entityOptional.isPresent()) {
             entity = entityOptional.get();
         } else {
             throw new ItemNotFoundException(GenErrorMessage.ITEM_NOT_FOUND);
@@ -88,18 +94,17 @@ public abstract class BaseEntityService<E extends BaseEntity, D extends JpaRepos
     }
 
 
-
-
-    public boolean existsById(long id){
+    public boolean existsById(long id) {
         return dao.existsById(id);
     }
 
     public D getDao() {
         return dao;
     }
+
     public Long getCurrentCustomerId() {
         User currentCustomer = authenticationService.getCurrentUser();
-        Long userId=currentCustomer.getId();
+        Long userId = currentCustomer.getId();
 
         return userId;
     }

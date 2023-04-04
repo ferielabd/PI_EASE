@@ -34,8 +34,32 @@ public class User implements Serializable {
 
     long phone;
     long salaire;
-    @Temporal(TemporalType.DATE)
+    //@Temporal(TemporalType.DATE)
     LocalDate birthDate;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getSalaire() {
+        return salaire;
+    }
+
+    public void setSalaire(long salaire) {
+        this.salaire = salaire;
+    }
+
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
 
     String mail;
 

@@ -1,6 +1,6 @@
 package com.example.pi_ease.Services.Classes;
 
-import com.example.pi_ease.DAO.CreditHistoryType;
+import com.example.pi_ease.DAO.Entities.CreditHistoryType;
 import com.example.pi_ease.DAO.Entities.CreditHistory;
 import com.example.pi_ease.DTO.CreditRequest;
 import com.example.pi_ease.DTO.CreditScoringLibrary;

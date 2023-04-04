@@ -65,6 +65,122 @@ public class Credit extends BaseEntity  {
     @ManyToOne
     CreditHistory creditHistory;
 
+    public void setId(int id) {
+        Id = id;
+    }
+
+    public Integer getInstallmentCount() {
+        return installmentCount;
+    }
+
+    public void setInstallmentCount(Integer installmentCount) {
+        this.installmentCount = installmentCount;
+    }
+
+    public BigDecimal getPrincipalLoanAmount() {
+        return principalLoanAmount;
+    }
+
+    public void setPrincipalLoanAmount(BigDecimal principalLoanAmount) {
+        this.principalLoanAmount = principalLoanAmount;
+    }
+
+    public BigDecimal getMonthlyInstallmentAmount() {
+        return monthlyInstallmentAmount;
+    }
+
+    public void setMonthlyInstallmentAmount(BigDecimal monthlyInstallmentAmount) {
+        this.monthlyInstallmentAmount = monthlyInstallmentAmount;
+    }
+
+    public BigDecimal getInterestToBePaid() {
+        return interestToBePaid;
+    }
+
+    public void setInterestToBePaid(BigDecimal interestToBePaid) {
+        this.interestToBePaid = interestToBePaid;
+    }
+
+    public BigDecimal getPrincipalToBePaid() {
+        return principalToBePaid;
+    }
+
+    public void setPrincipalToBePaid(BigDecimal principalToBePaid) {
+        this.principalToBePaid = principalToBePaid;
+    }
+
+    public BigDecimal getRemainingPrincipal() {
+        return remainingPrincipal;
+    }
+
+    public void setRemainingPrincipal(BigDecimal remainingPrincipal) {
+        this.remainingPrincipal = remainingPrincipal;
+    }
+
+    public LocalDate getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public CreditStatusType getCreditStatusType() {
+        return creditStatusType;
+    }
+
+    public void setCreditStatusType(CreditStatusType creditStatusType) {
+        this.creditStatusType = creditStatusType;
+    }
+
+    public String getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(String attachment) {
+        this.attachment = attachment;
+    }
+
+    public String getDescription() {
+        return Description;
+    }
+
+    public void setDescription(String description) {
+        Description = description;
+    }
+
+    public ActivitySector getActivitySector() {
+        return activitySector;
+    }
+
+    public void setActivitySector(ActivitySector activitySector) {
+        this.activitySector = activitySector;
+    }
+
+    public User getUserCredit() {
+        return userCredit;
+    }
+
+    public void setUserCredit(User userCredit) {
+        this.userCredit = userCredit;
+    }
+
+    public List<Tranche> getTrancheList() {
+        return trancheList;
+    }
+
+    public void setTrancheList(List<Tranche> trancheList) {
+        this.trancheList = trancheList;
+    }
+
+    public CreditHistory getCreditHistory() {
+        return creditHistory;
+    }
+
+    public void setCreditHistory(CreditHistory creditHistory) {
+        this.creditHistory = creditHistory;
+    }
+
     @Override
     public int getId() {
         return 0;

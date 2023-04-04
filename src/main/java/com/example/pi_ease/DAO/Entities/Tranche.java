@@ -33,6 +33,33 @@ public class Tranche extends BaseEntity {
     @ManyToOne
     Credit creditT;
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public BigDecimal getPaymentAmount() {
+        return paymentAmount;
+    }
+
+    public void setPaymentAmount(BigDecimal paymentAmount) {
+        this.paymentAmount = paymentAmount;
+    }
+
+    public LocalDate getPaymentDate() {
+        return PaymentDate;
+    }
+
+    public void setPaymentDate(LocalDate paymentDate) {
+        PaymentDate = paymentDate;
+    }
+
+    public Credit getCreditT() {
+        return creditT;
+    }
+
+    public void setCreditT(Credit creditT) {
+        this.creditT = creditT;
+    }
 
     @Override
     public int getId() {

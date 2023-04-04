@@ -18,5 +18,11 @@ public abstract class BaseEntity implements BaseModel, Cloneable, Serializable {
     @Embedded
     private BaseAdditionalFields baseAdditionalFields;
 
+    public BaseAdditionalFields getBaseAdditionalFields() {
+        return baseAdditionalFields;
+    }
 
+    public void setBaseAdditionalFields(BaseAdditionalFields baseAdditionalFields) {
+        this.baseAdditionalFields = baseAdditionalFields;
+    }
 }

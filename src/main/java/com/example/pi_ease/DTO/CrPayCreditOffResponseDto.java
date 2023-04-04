@@ -11,4 +11,44 @@ public class CrPayCreditOffResponseDto {
     private BigDecimal paidAmount;
     private BigDecimal remainingAmount;
     private CreditStatusType CreditStatusType;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
+    }
+
+    public BigDecimal getPaidAmount() {
+        return paidAmount;
+    }
+
+    public void setPaidAmount(BigDecimal paidAmount) {
+        this.paidAmount = paidAmount;
+    }
+
+    public BigDecimal getRemainingAmount() {
+        return remainingAmount;
+    }
+
+    public void setRemainingAmount(BigDecimal remainingAmount) {
+        this.remainingAmount = remainingAmount;
+    }
+
+    public com.example.pi_ease.DAO.Entities.CreditStatusType getCreditStatusType() {
+        return CreditStatusType;
+    }
+
+    public void setCreditStatusType(com.example.pi_ease.DAO.Entities.CreditStatusType creditStatusType) {
+        CreditStatusType = creditStatusType;
+    }
 }

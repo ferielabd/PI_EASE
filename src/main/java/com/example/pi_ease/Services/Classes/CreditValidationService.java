@@ -17,8 +17,9 @@ import java.time.temporal.ChronoUnit;
 @Transactional
 @RequiredArgsConstructor
 public class CreditValidationService {
-
-
+    public CreditValidationService(CreditErrorMessage creditErrorMessage) {
+        this.creditErrorMessage = creditErrorMessage;
+    }
 
     private CreditErrorMessage creditErrorMessage;
  public void controlIsParameterNotNull(Integer installmentCount, BigDecimal principalLoanAmount) {
