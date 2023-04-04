@@ -9,13 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CreditScoringLibrary implements InitializingBean {
+public class CreditScoringLibrary {
 
     @Autowired
     AuthController authController;
-    User user;
+    User user = null;
 
     public double calculateCreditScore(CreditHistory creditHistory) {
+        if(user == null)
+            this.user = authController.getCurrentUser();
+
         double score = 0;
         // creditHistory.setIncome(user.getSalaire());
         // Calcule le score en fonction des attributs de la demande de crédit
@@ -36,10 +39,5 @@ public class CreditScoringLibrary implements InitializingBean {
         }
 
         return score;
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        this.user = authController.getCurrentUser();
     }
 }

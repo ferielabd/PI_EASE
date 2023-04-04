@@ -1,7 +1,8 @@
 package com.example.pi_ease.Exceptions;
 import com.example.pi_ease.Services.Interfaces.BaseErrorMessage;
 
-public enum CreditErrorMessage   implements BaseErrorMessage {
+
+public enum CreditErrorMessage implements BaseErrorMessage {
     INTEREST_RATE_CANNOT_BE_NEGATIVE("Interest rate cannot be negative"
             , "Check interest_rate constant or the api."),
     PARAMETER_CANNOT_BE_NULL("Parameter cannot be null"
