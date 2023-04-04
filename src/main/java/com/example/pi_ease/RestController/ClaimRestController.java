@@ -221,13 +221,76 @@ public class ClaimRestController {
             boolean traite =claim.getTraiteClaim() ;
             long diffInMillies = Math.abs(date.getTime() - dateclaim.getTime());
             long diffInDays = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-            if ((diffInDays > 2) && (traite==false)) {
+            if ((diffInDays > 1) && (traite==false)) {
 
                 list.add(claim.getRefclaim());
 
 
             }
         }
-        this.emailService.sendSimpleEmail1("ghassen.marzouk@esprit.tn", "check claims",list);
+        if (list.isEmpty()){
+            this.emailService.sendSimpleEmail("ghassen.marzouk@esprit.tn", "check claims","you have no claims to check today");
+
+        }else
+            this.emailService.sendSimpleEmail1("ghassen.marzouk@esprit.tn", "check claims",list);
+
+    }
+    @GetMapping("/nbclaim")
+    public Float getnbclaims(){
+        List<Claim> myObjects = claimService.selectAll();
+        float count=0;
+        for (Claim claim : myObjects) {
+            count=count +1;
+
+        }
+        return count;
+
+    }
+
+    //http://localhost:8080/pidev/claim/nbclaim1
+    @GetMapping("/nbclaim1")
+    public String getpourcentagetraite(){
+        List<Claim> myObjects = claimService.selectAll();
+        float b = getnbclaims();
+        float count=0;
+
+        for (Claim claim : myObjects){
+
+            if (claim.getTraiteClaim()==true){
+                count =count+1;
+            }
+
+        }
+        float result = (float) count / b;
+
+        return String.valueOf(result*100)+"%";
+
+    }
+
+    //http://localhost:8080/pidev/claim/nbclaim2
+    @GetMapping("/nbclaim2")
+    public String getpourcentage(){
+        List<Claim> myObjects = claimService.selectAll();
+        float b = getnbclaims();
+        float count=0;
+        float count1=0;
+        float count2=0;
+
+        for (Claim claim : myObjects){
+
+            if (claim.getType()==TypeClaim.Credit){
+                count =count+1;
+            } else if (claim.getType()==TypeClaim.Transaction) {
+                count1=count1+1;
+
+            }else {count2=count2+1;}
+
+        }
+        float result = (float) count / b;
+        float result1 = (float) count1 / b;
+        float result2 = (float) count2 / b;
+
+        return "le pourcentage des reclamation de type Credit est "+String.valueOf(result*100)+"% / le pourcentage des reclamation de type Transaction est "+String.valueOf(result1*100)+"% / le pourcentage des reclamation de type Account est "+String.valueOf(result2*100)+"%";
+
     }
 }

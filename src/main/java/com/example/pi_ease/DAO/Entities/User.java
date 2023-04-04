@@ -39,7 +39,7 @@ public class User implements Serializable {
     @ManyToOne
     Role role;
 
-    @ManyToMany(mappedBy = "receiver")
+  /*  @ManyToMany(mappedBy = "receiver")
     List <Notification> notifications;
 
     @OneToMany (mappedBy = "user")
@@ -48,8 +48,8 @@ public class User implements Serializable {
   @OneToMany(mappedBy = "userCredit")
     List<Credit> creditList;
 
-   /* @OneToMany(mappedBy = "userc")
-    List<Claim> claimList;*/
+    @OneToMany(mappedBy = "userc")
+    List<Claim> claimList;
 
     @ManyToMany(mappedBy = "userAcc")
     List<Account>  accountList;
@@ -65,7 +65,7 @@ public class User implements Serializable {
     List<Project> projectListC;
 
     @OneToOne
-    Portfolio portfolio;
+    Portfolio portfolio;*/
 
     @ManyToOne
     Reaction reaction ;
@@ -75,8 +75,8 @@ public class User implements Serializable {
 
     @OneToMany(mappedBy = "userComment")
     List<Comment> comt;
-    @OneToMany(mappedBy = "userpost")
-    List<Post> postList;
+    /*@OneToMany(mappedBy = "userpost")
+    List<Post> postList;*/
     @OneToMany
     List<Message> messageList;
 
