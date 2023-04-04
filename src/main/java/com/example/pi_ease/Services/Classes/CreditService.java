@@ -25,9 +25,6 @@ public class CreditService {
     private final AuthController authController;
 
 
-    private static final int MINIMUM_AGE = 18;
-    private static final int MAXIMUM_AGE = 45;
-    private static final double MINIMUM_SALARY = 1500.0;
 
     private final BigDecimal INTEREST_RATE = BigDecimal.valueOf(8.02/100);
     private final BigDecimal TAX_RATE = BigDecimal.valueOf(20/100);
@@ -133,8 +130,7 @@ public class CreditService {
     public CreditDto applyLoan(CrApplyCreditDto loaLoanApplyLoanDto) {
 
         creditValidationService.controlIsParameterNotNull(loaLoanApplyLoanDto);
-
-      // Long userId = authController.getCurrentUser();
+        User user = authController.getCurrentUser();
         BigDecimal principalLoanAmount = loaLoanApplyLoanDto.getPrincipalLoanAmount();
         Integer installment = loaLoanApplyLoanDto.getInstallmentCount();
         BigDecimal installmentCount = BigDecimal.valueOf(installment);
@@ -152,7 +148,7 @@ public class CreditService {
 
         BigDecimal monthlyInstallmentAmount = totalPayment.divide(installmentCount,RoundingMode.CEILING);
 
-        BigDecimal maxInstallmentAmount = monthlySalary.multiply(BigDecimal.valueOf(0.5));
+        BigDecimal maxInstallmentAmount = monthlySalary.multiply(BigDecimal.valueOf(0.4));
         BigDecimal maxLoanAmount = (maxInstallmentAmount
                 .multiply(installmentCount))
                 .multiply(BigDecimal.valueOf(0.80));
@@ -167,7 +163,9 @@ public class CreditService {
                 principalLoanAmount, maxLoanAmount);
         creditValidationService.controlIsInstallmentCountNotGreaterThanInstallmentCountLimit(installment,INSTALLMENT_COUNT_LIMIT);
 
-       // credit.setCustomerId(customerId);
+
+
+        credit. setUserCredit(user);
         credit.setMonthlyInstallmentAmount(monthlyInstallmentAmount);
         credit.setInterestToBePaid(totalInterest);
         credit.setPrincipalToBePaid(principalLoanAmount);
@@ -201,7 +199,7 @@ public class CreditService {
 
         Tranche tranche = new Tranche();
 
-       // tranche.setLoanId(id);
+       tranche.setCreditT(credit);
         tranche.setPaymentAmount(installmentAmount);
         tranche.setPaymentDate(LocalDate.now());
 
@@ -226,7 +224,7 @@ public class CreditService {
 
     private CrPayInstallmentResponseDto  convertToLoaPayInstallmentResponseDto(Credit loaLoan, Tranche loanPayment){
 
-     //  !!!! Long loanId = loanPayment.getLoanId();
+        int loanId = loanPayment.getCreditT().getId();
         BigDecimal paymentAmount = loanPayment.getPaymentAmount();
         LocalDate PaymentDate = loanPayment.getPaymentDate();
 
@@ -235,7 +233,7 @@ public class CreditService {
 
         CrPayInstallmentResponseDto loaPayInstallmentResponseDto = new CrPayInstallmentResponseDto();
 
-      //!!!!!!!!  loaPayInstallmentResponseDto.setLoanId(loanId);
+        //***---loaPayInstallmentResponseDto.setLoanId(loanId);
         loaPayInstallmentResponseDto.setPaymentAmount(paymentAmount);
         loaPayInstallmentResponseDto.setPaymentDate(PaymentDate);
         loaPayInstallmentResponseDto.setRemainingPrincipal(remainingPrincipal);

@@ -57,7 +57,6 @@ public class Credit extends BaseEntity  {
   @ManyToOne
     ActivitySector activitySector;
     @ManyToOne
-    @JsonIgnore
     User userCredit;
 
     @OneToMany(mappedBy = "creditT",cascade = CascadeType.ALL)

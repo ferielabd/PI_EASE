@@ -5,27 +5,21 @@ import lombok.Data;
 
 @Data
 public class CreditRequest {
-    private SolvencyDto solvency;
+
     private CreditHistory creditHistory;
     private RepaymentCapacityDto repaymentCapacity;
     private double loanAmount;
 
     // Constructeur prenant en compte tous les attributs de la demande de crédit
-    public CreditRequest(SolvencyDto solvency, CreditHistory creditHistory, RepaymentCapacityDto repaymentCapacity, double loanAmount) {
-        this.solvency = solvency;
+    public CreditRequest(  CreditHistory creditHistory, RepaymentCapacityDto repaymentCapacity, double loanAmount) {
+
         this.creditHistory = creditHistory;
         this.repaymentCapacity = repaymentCapacity;
         this.loanAmount = loanAmount;
     }
 
     // Getters et setters pour chaque attribut
-    public SolvencyDto getSolvency() {
-        return solvency;
-    }
 
-    public void setSolvency(SolvencyDto solvency) {
-        this.solvency = solvency;
-    }
 
     public CreditHistory getCreditHistory() {
         return creditHistory;

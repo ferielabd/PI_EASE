@@ -3,10 +3,13 @@ package com.example.pi_ease.RestControllers;
 
 
 import com.example.pi_ease.DTO.*;
+import com.example.pi_ease.Services.Classes.CreditDecisionService;
 import com.example.pi_ease.Services.Classes.CreditService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 
@@ -14,8 +17,10 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @RequestMapping("/Credit")
 public class CreditController {
-
-     CreditService service;
+    @Autowired
+    CreditService service;
+    @Autowired
+    private CreditDecisionService creditDecisionService;
 
     @Operation(
             tags = "Loan Controller",
@@ -23,9 +28,9 @@ public class CreditController {
             description = "Calculate the loan."
     )
     @GetMapping("/calculate-loan")
-    public ResponseEntity<RestResponse<CrCalculateCreditResponseDto>> calculateLoan(@RequestParam Integer installmentCount, @RequestParam BigDecimal principalLoanAmount ){
+    public ResponseEntity<RestResponse<CrCalculateCreditResponseDto>> calculateLoan(@RequestParam Integer installmentCount, @RequestParam BigDecimal principalLoanAmount) {
 
-        CrCalculateCreditResponseDto loaCalculateLoanResponseDto = service.calculateLoan(installmentCount,principalLoanAmount);
+        CrCalculateCreditResponseDto loaCalculateLoanResponseDto = service.calculateLoan(installmentCount, principalLoanAmount);
 
         return ResponseEntity.ok(RestResponse.of(loaCalculateLoanResponseDto));
     }
@@ -36,7 +41,7 @@ public class CreditController {
             description = "Calculate the late fee."
     )
     @GetMapping("/calculate-late-fee/{id}")
-    public ResponseEntity<RestResponse<CrCalculateLateFeeResponseDto>> calculateLateFee(@PathVariable Long id){
+    public ResponseEntity<RestResponse<CrCalculateLateFeeResponseDto>> calculateLateFee(@PathVariable Long id) {
 
         CrCalculateLateFeeResponseDto loaCalculateLateFeeResponseDto = service.calculateLateFee(id);
 
@@ -49,7 +54,7 @@ public class CreditController {
             description = "Gets a loan by id."
     )
     @GetMapping("/{id}")
-    public ResponseEntity<RestResponse<CreditDto>> findLoanById(@PathVariable Long id){
+    public ResponseEntity<RestResponse<CreditDto>> findLoanById(@PathVariable Long id) {
 
         CreditDto loaLoanDto = service.findLoanById(id);
 
@@ -62,7 +67,7 @@ public class CreditController {
             description = "Apply for a loan."
     )
     @PostMapping("/apply-loan")
-    public ResponseEntity<RestResponse<CreditDto>> applyLoan(@RequestBody CrApplyCreditDto loaApplyLoanDto){
+    public ResponseEntity<RestResponse<CreditDto>> applyLoan(@RequestBody CrApplyCreditDto loaApplyLoanDto) {
 
         CreditDto loaLoanDto = service.applyLoan(loaApplyLoanDto);
 
@@ -75,7 +80,7 @@ public class CreditController {
             description = "Pay installment of the loan."
     )
     @PostMapping("/pay-installment/{id}")
-    public ResponseEntity<RestResponse<CrPayInstallmentResponseDto>> payInstallment(@PathVariable Long id){
+    public ResponseEntity<RestResponse<CrPayInstallmentResponseDto>> payInstallment(@PathVariable Long id) {
 
         CrPayInstallmentResponseDto loaPayInstallmentResponseDto = service.payInstallment(id);
 
@@ -83,12 +88,12 @@ public class CreditController {
     }
 
     @Operation(
-            tags="Loan Controller",
+            tags = "Loan Controller",
             summary = "Pay loan off",
             description = "Pay the remaining amount and close the loan. "
     )
     @DeleteMapping("/pay-loan-off/{id}")
-    public ResponseEntity<RestResponse<CrPayCreditOffResponseDto>> payLoanOff(@PathVariable Long id){
+    public ResponseEntity<RestResponse<CrPayCreditOffResponseDto>> payLoanOff(@PathVariable Long id) {
 
         CrPayCreditOffResponseDto loaPayLoanOffResponseDto = service.payLoanOff(id);
 
@@ -96,6 +101,17 @@ public class CreditController {
     }
 
 
+    @PostMapping("/credit-request")
+    public String processCreditRequest(@ModelAttribute("creditRequest") CreditRequest creditRequest, Model model) {
+        boolean isApproved = creditDecisionService.isCreditApproved(creditRequest);
+        if (isApproved) {
+            model.addAttribute("result", "Credit approved!");
+        } else {
+            model.addAttribute("result", "Credit not approved.");
+        }
+        return "credit-result";
+
+
+    }
 
 }
-

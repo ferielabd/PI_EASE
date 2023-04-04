@@ -3,12 +3,12 @@ package com.example.pi_ease.Services.Classes;
 import com.example.pi_ease.DAO.Entities.BaseAdditionalFields;
 import com.example.pi_ease.DAO.Entities.BaseEntity;
 import com.example.pi_ease.DAO.Entities.GenErrorMessage;
+import com.example.pi_ease.DAO.Entities.User;
 import com.example.pi_ease.Exceptions.ItemNotFoundException;
 import com.example.pi_ease.RestControllers.AuthController;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import java.util.Date;
@@ -21,8 +21,7 @@ public abstract class BaseEntityService<E extends BaseEntity, D extends JpaRepos
 
     private final D dao;
 
-    private static final Integer DEFAULT_PAGE = 0;
-    private static final Integer DEFAULT_SIZE = 10;
+
 
    private AuthController authenticationService;
 
@@ -88,31 +87,8 @@ public abstract class BaseEntityService<E extends BaseEntity, D extends JpaRepos
         return entity;
     }
 
-    protected PageRequest getPageRequest(Optional<Integer> pageOptional, Optional<Integer> sizeOptional) {
-        Integer page = getPage(pageOptional);
-        Integer size = getSize(sizeOptional);
 
-        PageRequest pageRequest = PageRequest.of(page, size);
-        return pageRequest;
-    }
 
-    protected Integer getSize(Optional<Integer> sizeOptional) {
-
-        Integer size = DEFAULT_SIZE;
-        if (sizeOptional.isPresent()){
-            size = sizeOptional.get();
-        }
-        return size;
-    }
-
-    protected Integer getPage(Optional<Integer> pageOptional) {
-
-        Integer page = DEFAULT_PAGE;
-        if (pageOptional.isPresent()){
-            page = pageOptional.get();
-        }
-        return page;
-    }
 
     public boolean existsById(long id){
         return dao.existsById(id);
@@ -121,11 +97,12 @@ public abstract class BaseEntityService<E extends BaseEntity, D extends JpaRepos
     public D getDao() {
         return dao;
     }
+    public Long getCurrentCustomerId() {
+        User currentCustomer = authenticationService.getCurrentUser();
+        Long userId=currentCustomer.getId();
 
-    /*public Long getCurrentCustomerId() {
-        Long currentCustomerId = authenticationService.getCurrentUser();
-        return currentCustomerId;
-    }*/
+        return userId;
+    }
 
 
 }

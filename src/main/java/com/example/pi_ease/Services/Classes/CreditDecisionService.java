@@ -1,17 +1,22 @@
 package com.example.pi_ease.Services.Classes;
 
+import com.example.pi_ease.DAO.CreditHistoryType;
 import com.example.pi_ease.DAO.Entities.CreditHistory;
 import com.example.pi_ease.DTO.CreditRequest;
+import com.example.pi_ease.DTO.CreditScoringLibrary;
 import com.example.pi_ease.DTO.RepaymentCapacityDto;
-import com.example.pi_ease.DTO.SolvencyDto;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CreditDecisionService {
 
+    private CreditScoringLibrary creditScoringLibrary;
+    public CreditDecisionService(CreditScoringLibrary creditScoringLibrary) {
+        this.creditScoringLibrary = creditScoringLibrary;
+    }
     public boolean isCreditApproved(CreditRequest creditRequest) {
         // Vérification de la solvabilité de l'emprunteur
-        if (!isSolvencyVerified(creditRequest.getSolvency())) {
+        if (!isSolvencyVerified(creditRequest.getCreditHistory())) {
             return false;
         }
 
@@ -34,14 +39,18 @@ public class CreditDecisionService {
         return true;
     }
 
-    private boolean isSolvencyVerified(SolvencyDto solvency) {
+    private boolean isSolvencyVerified(CreditHistory creditHistory) {
         // Vérifie que l'emprunteur est solvable
-        return solvency.getCreditScore() >= 600 && solvency.getIncome() >= 1500;
+        // Effectue une évaluation de crédit en utilisant la bibliothèque d'évaluation de crédit
+        double creditScore = creditScoringLibrary.calculateCreditScore(creditHistory);
+
+        return creditScore >= 700 && creditHistory.getIncome() >= 1500;
     }
 
-    private boolean isCreditHistoryVerified(CreditHistory creditHistory) {
+   private boolean isCreditHistoryVerified(CreditHistory creditHistory) {
         // Vérifie l'historique de crédit de l'emprunteur
-        return !creditHistory.hasDefaulted() && creditHistory.getNumCreditInquiries() <= 3;
+        return (creditHistory.getCreditHistoryType()==(CreditHistoryType.FAIR)||creditHistory.getCreditHistoryType()==CreditHistoryType.GOOD);
+
     }
 
     private boolean isRepaymentCapacityVerified(RepaymentCapacityDto repaymentCapacity) {

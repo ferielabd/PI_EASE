@@ -1,5 +1,6 @@
 package com.example.pi_ease.DAO.Entities;
 
+import com.example.pi_ease.DAO.CreditHistoryType;
 import com.example.pi_ease.DAO.Entities.BaseEntity;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -7,8 +8,8 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Setter
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -19,10 +20,12 @@ public class CreditHistory extends BaseEntity {
     @Column(name = "Id_hisC")
     int Id;
 
-    boolean hasDefaulted;
-    int numCreditInquiries;
+     double income;
+     CreditHistoryType creditHistoryType;
+     int loanAmount;
     @OneToMany(mappedBy = "creditHistory",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Credit> Credits;
+
 
 
 
