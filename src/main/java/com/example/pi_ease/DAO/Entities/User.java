@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
 
 @Entity
@@ -230,7 +233,7 @@ public class User {
     @OneToMany (mappedBy = "user")
     List <Notification> emitter;
 
-  @OneToMany(mappedBy = "userCredit")
+    @OneToMany(mappedBy = "userCredit")
     List<Credit> creditList;
 
     @OneToMany(mappedBy = "userc")

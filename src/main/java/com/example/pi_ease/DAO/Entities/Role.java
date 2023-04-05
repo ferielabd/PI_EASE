@@ -18,6 +18,8 @@ public class Role implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    private long id;
+
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
     private TypeRole name;
