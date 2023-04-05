@@ -20,6 +20,7 @@ public class Post {
     int idP ;
     String Description ;
     String attachement ;
+    int likes;
     @Temporal(TemporalType.DATE)
     Date DateP;
     @OneToMany
