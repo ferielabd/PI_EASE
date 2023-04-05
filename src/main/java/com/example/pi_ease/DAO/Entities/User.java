@@ -233,7 +233,7 @@ public class User {
   @OneToMany(mappedBy = "userCredit")
     List<Credit> creditList;
 
-    @OneToMany(mappedBy = "userClaim")
+    @OneToMany(mappedBy = "userc")
     List<Claim> claimList;
 
     @ManyToMany(mappedBy = "userAcc")
