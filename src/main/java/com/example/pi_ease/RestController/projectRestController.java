@@ -3,6 +3,7 @@ package com.example.pi_ease.RestController;
 import com.example.pi_ease.DAO.Entities.Project;
 import com.example.pi_ease.Service.Interfaces.IProjectService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @RequestMapping("Project")
 public class projectRestController {
+    @Autowired
     private IProjectService iProjectService;
     @GetMapping("/afficherProjet")
     public List<Project> afficher(){

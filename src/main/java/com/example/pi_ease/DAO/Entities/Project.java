@@ -1,4 +1,5 @@
 package com.example.pi_ease.DAO.Entities;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -61,9 +62,11 @@ public class Project implements Serializable {
     User userClient;
 
 
-    //@JsonBackReference
+
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    @JsonIgnore
+
     List<Investment> investments;
     @OneToOne
     FileDb fileDB;

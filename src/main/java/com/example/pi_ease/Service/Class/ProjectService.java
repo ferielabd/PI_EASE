@@ -4,6 +4,7 @@ import com.example.pi_ease.DAO.Entities.Project;
 import com.example.pi_ease.Repositories.ProjectRepository;
 import com.example.pi_ease.Service.Interfaces.IProjectService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Service
 public class ProjectService implements IProjectService {
+    @Autowired
     private ProjectRepository projectRepository;
     @Override
     public Project add(Project project) {
