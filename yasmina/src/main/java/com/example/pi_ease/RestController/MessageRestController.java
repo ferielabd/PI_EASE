@@ -3,7 +3,6 @@ package com.example.pi_ease.RestControllers;
 import com.example.pi_ease.DAO.Entities.Comment;
 import com.example.pi_ease.DAO.Entities.Message;
 import com.example.pi_ease.Services.Interface.ICommentServices;
-import com.example.pi_ease.Services.Interface.IMessageServices;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

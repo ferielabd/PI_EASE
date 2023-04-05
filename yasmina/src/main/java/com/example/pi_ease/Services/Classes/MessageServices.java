@@ -3,9 +3,7 @@ package com.example.pi_ease.Services.Classes;
 import com.example.pi_ease.DAO.Entities.Comment;
 import com.example.pi_ease.DAO.Entities.Message;
 import com.example.pi_ease.DAO.Entities.Post;
-import com.example.pi_ease.DAO.Repositories.MessageRepository;
 import com.example.pi_ease.DAO.Repositories.PostRepository;
-import com.example.pi_ease.Services.Interface.IMessageServices;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

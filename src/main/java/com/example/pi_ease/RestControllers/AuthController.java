@@ -45,7 +45,7 @@ public class AuthController  {
     AuthenticationManager authenticationManager;
 
 
-    UserRepository userRepositories;
+    UserRepository userRepositories ;
 
     RoleRespository roleRepositories;
 

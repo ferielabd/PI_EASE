@@ -1,36 +1,38 @@
 package com.example.pi_ease.Services.Classes;
-import com.example.pi_ease.Dto.CommentDto;
-import com.example.pi_ease.DAO.Entities.*;
-import com.example.pi_ease.Exceptions.PostNotFoundException;
-import com.example.pi_ease.Mapper.CommentMapper;
+
+import com.example.pi_ease.DAO.Entities.BadgeType;
+import com.example.pi_ease.DAO.Entities.Comment;
+import com.example.pi_ease.DAO.Entities.Post;
+import com.example.pi_ease.DAO.Entities.User;
 import com.example.pi_ease.DAO.Repositories.CommentRepository;
 import com.example.pi_ease.DAO.Repositories.PostRepository;
 import com.example.pi_ease.DAO.Repositories.UserRepository;
-import com.example.pi_ease.RestControllers.AuthController;
+import com.example.pi_ease.Dto.CommentDto;
+import com.example.pi_ease.Exceptions.PostNotFoundException;
+import com.example.pi_ease.Mapper.CommentMapper;
 import com.example.pi_ease.Services.Interface.ICommentServices;
-import lombok.AllArgsConstructor ;
-
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service ;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.util.Date;
-import java.util.List ;
+import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
 @Service
 @AllArgsConstructor
-public class CommentServices  implements ICommentServices {
+public class CommentServices implements ICommentServices {
     private CommentRepository commentRepositoryy;
     private PostRepository postRepository;
 
     private UserRepository userRepository;
     private EmailServices emailServices ;
-    private BadwordServices badwordService;
-    private AuthController authController;
     private CommentMapper commentMapper;
 
 
@@ -131,7 +133,7 @@ public class CommentServices  implements ICommentServices {
         String newwcontent = "";
         for (String c : content) {
             System.out.println(c);
-            User user = userRepository.findById(4L).get();
+            User user = userRepository.findById(1L).get();
             System.out.println(user.getPhone());
             Comment.setUser(user);
             commentRepositoryy.save(Comment);
@@ -182,13 +184,12 @@ public class CommentServices  implements ICommentServices {
         } else if (commentCount > 0) {
             user.setCommentBadge(BadgeType.BRONZE);
         }
-
         userRepository.save(user);
 
 
     }
 
-        @Override
+    @Override
     public Comment ajouterSousCommentaire(Long id, Long idComm, Comment underComment) {
         Comment parent = commentRepositoryy.findById(idComm).get();
         User user = userRepository.findById(id).get();
@@ -208,6 +209,5 @@ public class CommentServices  implements ICommentServices {
 
     }
 
+
 }
-
-

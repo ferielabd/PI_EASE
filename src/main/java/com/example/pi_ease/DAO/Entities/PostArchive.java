@@ -15,7 +15,7 @@ import java.time.Instant;
 //@Document(collection = "post_archive")
 public class PostArchive {
     @Id
-    private String id;
+    private long id;
 
     private Long postId;
 

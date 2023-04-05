@@ -10,69 +10,47 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.http.ResponseEntity.status;
 
 @RestController
 @AllArgsConstructor
-
+@RequestMapping("/api/posts/")
 public class PostRestController {
 
-    @Autowired
-    IPostServices iPostServices ;
+
+    private  IPostServices iPostServices ;
     private EmailServices emailServices ;
     private UserRepository userRepository ;
     private PostRepository postRepository;
 
-    @GetMapping("/afficherPosts")
-    public List<Post> afficher() {
-        return iPostServices.selectAll();
-    }
-
-    @PostMapping("/ajouterPost")
-    public Post ajouter(@RequestBody Post post) {
-        List<String> badWords = Arrays.asList("aaa", "badword2", "badword3");
-        // Check if the comment contains any bad words
-        for (String word : badWords) {
-            if (post.getText().toLowerCase().contains((CharSequence) word)) {
-                //Ajoputer modifier supprimer findall w feha text et id
-                // Increment the alert count for the user who made the post
-                //User user = authController.getCurrentUser();
-                User user = userRepository.findById(1L).get();
-                System.out.println(user.getPhone());
-                //int alertCount = user.getAlertCount();
-                //user.setAlertCount(alertCount + 1);
-                this.emailServices.sendSimpleEmail("mahnoud.mbshk@gmail.com", "badwords", "Attention!!!");
-                return iPostServices.add(post);
-            }
+    @PostMapping("/ajouterPost/{id}")
+    public Post ajouter(@PathVariable Long id, @RequestBody Post post) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            post.setUserP(user);
+            return postRepository.save(post);
+        } else {
+            throw new IllegalArgumentException("User with ID " + id + " does not exist");
         }
-
-        return iPostServices.add(post);
     }
 
     @PostMapping("/ajouterAllPost")
     public List<Post> addAll(@RequestBody List<Post> list){
         return iPostServices.addAll(list) ;}
-    @GetMapping("/posts/popularite")
+
+    @GetMapping("/popularite")
     public List<Post> trierParPopularite() {
         List<Post> posts = postRepository.findAll() ;  //Récupérez la liste de posts depuis la base de données ou une autre source
         return iPostServices.trierParPopularite(posts);
-    }
-
-    @PutMapping("/{postId}/archive-after-3-days")
-    public ResponseEntity<String> archivePostAfter3Days(@PathVariable Long postId) {
-        Post post = iPostServices.getPostById(postId);
-
-        if (post == null) {
-            return new ResponseEntity<>("Post not found", HttpStatus.NOT_FOUND);
-        }
-
-        iPostServices.archivePostAfter3Days(post);
-        return new ResponseEntity<>("Post archived successfully", HttpStatus.OK);
     }
     @GetMapping("/afficherAllPost")
     public ResponseEntity<List<PostResponse>> getAllPosts() {
@@ -108,6 +86,7 @@ public class PostRestController {
     public List<Post> getPostsByUsername(@PathVariable("name") String userName) {
         return iPostServices.getPostsByUsername(userName);
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePost(@PathVariable("id") Long postId) {
 //           try {
@@ -152,10 +131,11 @@ public class PostRestController {
     }
     // http://localhost:8083/SpringMVC/Post/createPostForbidden/1
 
-    @PutMapping("createPostForbidden/{postId}/{id}")
+    @PutMapping("/FiltrerPost/{postId}/{id}")
     @ResponseBody
-    public void createPostForbidden(@PathVariable("postId") long postId ,@PathVariable("id") long id) {
-        iPostServices.createPostForbidden(postId,id);
+    public void FilterPostwithbadwords(@PathVariable("postId") long postId ,@PathVariable("id") long id) {
+        iPostServices.FilterPostwithbadwords(postId,id);
     }
+
 }
 

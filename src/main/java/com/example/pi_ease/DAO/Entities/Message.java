@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -16,12 +17,25 @@ import java.util.Date;
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int idMesg ;
-    int idUser ;
-    String Texte ;
-    @Temporal(TemporalType.DATE)
-    Date DateM;
+    private Long id;
+
     @ManyToOne
-    Room roomM;
+    private User sender;
+
+    @ManyToOne
+    private User recipient;
+
+    @Column(nullable = false)
+    private String content;
+
+    @Column(nullable = false)
+    private LocalDateTime sentAt;
+    /*private String senderName;
+    private String receiverName;
+    private String message;
+    private String date;
+    private Status status;*/
+
+
 
 }

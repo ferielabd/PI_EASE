@@ -26,6 +26,7 @@ public class User implements Serializable {
     long id;
 
     String username ;
+    String firstname ;
 
 
     int phone;
@@ -40,11 +41,9 @@ public class User implements Serializable {
     @Enumerated(EnumType.STRING)
     BadgeType commentBadge;
     @Enumerated(EnumType.STRING)
-    BadgeType postBadge;
-    @Enumerated(EnumType.STRING)
     private TypeUser typeUser;
-    @Email
-    @NotEmpty(message = "Email is required")
+    //@Email
+    //@NotEmpty(message = "Email is required")
     private String email;
 
     @ManyToMany
@@ -142,4 +141,8 @@ public class User implements Serializable {
     public void setPostList(List<Post> postList) {
         this.postList = postList;
     }
+
+    public String getFirstName() {
+        return firstname ;
+    };
 }

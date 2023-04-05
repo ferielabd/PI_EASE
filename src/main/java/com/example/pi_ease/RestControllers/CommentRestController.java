@@ -7,6 +7,7 @@ import com.example.pi_ease.DAO.Repositories.UserRepository;
 import com.example.pi_ease.Services.Classes.EmailServices;
 import com.example.pi_ease.Services.Interface.ICommentServices;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,17 +16,17 @@ import java.util.Arrays;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/comments/")
 @AllArgsConstructor
+@RequestMapping("/api/Comments/")
 public class CommentRestController {
 
-    private ICommentServices iCommentServices;
+   private ICommentServices iCommentServices ;
     private EmailServices emailServices;
     private UserRepository userRepository;
     private CommentRepository commentRepository;
 
 
-    @GetMapping("/afficherComment1")
+    @GetMapping("/afficherAllComment")
     public List<Comment> afficher() {
         return iCommentServices.selectAll();
 
@@ -33,21 +34,7 @@ public class CommentRestController {
 
     @PostMapping("/ajouterComment")
     public Comment ajouter(@RequestBody Comment comment) {
-        List<String> badWords = Arrays.asList("aaa", "badword2", "badword3");
-        // Check if the comment contains any bad words
-        for (String word : badWords) {
-            if (comment.getText().toLowerCase().contains((CharSequence) word)) {
-                //Ajoputer modifier supprimer findall w feha text et id
-                // Increment the alert count for the user who made the post
-                //User user = authController.getCurrentUser();
-                //int alertCount = user.getAlertCount();
-                //user.setAlertCount(alertCount + 1);
-                this.emailServices.sendSimpleEmail("mahnoud.mbshk@gmail.com", "badwords", "Attention!!!");
-                return iCommentServices.add(comment);
-            }
-        }
-
-        return iCommentServices.add(comment);
+        return  iCommentServices.add(comment);
     }
 
     @GetMapping("/getforbidden")
@@ -110,12 +97,12 @@ public class CommentRestController {
         iCommentServices.deleteByID(idComm) ;
     }
 
-    @PostMapping("/awardComment")
-    public void awardCommentBadges(@RequestBody User user){
-        iCommentServices.awardCommentBadges(user);}
     @DeleteMapping("/deleteAllComment")
     public void deleteAll(){
         iCommentServices.deleteAll();}
+    @PutMapping("/awardComment")
+    public void awardCommentBadges(@RequestBody User user){
+        iCommentServices.awardCommentBadges(user);}
     @GetMapping("/by-post/{postId}")
     public ResponseEntity<List<CommentDto>> getAllCommentsForPost(@PathVariable Long postId) {
         return ResponseEntity.status(HttpStatus.OK)

@@ -4,9 +4,12 @@ import com.example.pi_ease.Services.Interface.IReactServices;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @AllArgsConstructor
-public class ReactRestController {
+@RequestMapping("/api/Reacts/")
+public class ReactionRestController {
     private IReactServices iReactionServices ;
 
     @PutMapping("/modifierReaction")
@@ -14,16 +17,11 @@ public class ReactRestController {
 
         return iReactionServices.edit(react);
     }
-    @DeleteMapping ("/deleteReactById/{idReaction}")
-    public void deleteById(@PathVariable int idReaction ){
-
-        iReactionServices.deleteByID(idReaction) ;
-    }
 
     @DeleteMapping("/deleteAllReaction")
     public void deleteAll(){
         iReactionServices.deleteAll();}
-    @PostMapping("ReactToPost/{reactionId}/{PostId}/{id}")
+    @PostMapping("/ReactToPost/{reactionId}/{PostId}/{id}")
     @ResponseBody
     public void addReactToPost(@PathVariable("reactionId")int reaction,@PathVariable("PostId") Long PostId,@PathVariable("id") Long id) {
         iReactionServices.addReactToPost(reaction, PostId, id);
@@ -36,10 +34,15 @@ public class ReactRestController {
         iReactionServices.DislikePost(idReaction,id);
     }
 
+    @GetMapping("/afficherReactionAvecId/{idReaction}")
+    public React afficherAvecId(@PathVariable int idReaction )
+    {
 
+        return iReactionServices.selectById(idReaction);
+    }
 
     // http://localhost:8089/SpringMVC/React/ReactToPost1/2/1/1
-   @GetMapping("LikeDislikePost/{reactionId}/{PostId}/{id}")
+   @GetMapping("/LikeDislikePost/{reactionId}/{PostId}/{id}")
     public void LikeDislikePost(@PathVariable("reactionId")int reaction,@PathVariable("PostId") Long PostId,@PathVariable("id") Long id) {
         iReactionServices.LikeDislikePost(reaction, PostId, id);
     }

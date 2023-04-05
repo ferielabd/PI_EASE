@@ -1,17 +1,19 @@
 package com.example.pi_ease.Services.Classes;
 
-import com.example.pi_ease.Dto.PostResponse;
 import com.example.pi_ease.DAO.Entities.*;
+import com.example.pi_ease.DAO.Repositories.ArchiveRepository;
+import com.example.pi_ease.Dto.PostResponse;
 import com.example.pi_ease.Exceptions.PostNotFoundException;
 import com.example.pi_ease.Mapper.PostMapper;
 import com.example.pi_ease.DAO.Repositories.PostRepository;
-import com.example.pi_ease.DAO.Repositories.ReactRepository;
 import com.example.pi_ease.DAO.Repositories.UserRepository;
-import com.example.pi_ease.RestControllers.AuthController;
 import com.example.pi_ease.Services.Interface.IPostServices;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -25,18 +27,16 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@EnableScheduling
+@Slf4j
 @AllArgsConstructor
 public class PostServices  implements IPostServices {
     private PostRepository postRepository;
-    private ReactRepository reactRepository;
-
-    //private PostMapper postMapper;
     @Autowired
     private UserRepository userRepository;
 
-    private AuthController authController;
-
     private EmailServices emailServices;
+    private ArchiveRepository archiveRepository;
     private PostMapper postMapper;
 
     @Override
@@ -68,8 +68,9 @@ public class PostServices  implements IPostServices {
 
     @Override
     public List<Post> addAll(List<Post> list) {
-        return list;
+        return list ;
     }
+
 
     @Override
     public void deleteAll() {
@@ -106,16 +107,24 @@ public class PostServices  implements IPostServices {
                 .orElseThrow(() -> new UsernameNotFoundException(userName));
         return postRepository.findByUserP(user);
     }
-    public void deleteOldDeletedPosts() {
-        List<Post> deletedPosts = postRepository.findAllByDeletedTrue();
-        for (Post post : deletedPosts) {
-            archivePostAfter3Days(post);
+
+    public void archivePostAfter3Days(Post post) {
+        long currentTimeMillis = System.currentTimeMillis();
+        long createTimeMillis = post.getCreatedDate().toEpochMilli();
+        long threeDaysInMillis = 3 * 24 * 60 * 60 * 1000;
+        if (post.getNlikes() == 0 && (currentTimeMillis - createTimeMillis) > threeDaysInMillis) {
+            archivePost(post.getPostId());
         }
     }
 
-    @Scheduled(cron = "0 0 0 * * ?") // every day at 00:00
+    @Scheduled(cron = "0 20 03 * * *") // every day at 00:00
     public void deleteOldDeletedPostsDaily() {
-        deleteOldDeletedPosts();
+        List<Post> deletedPosts = postRepository.findAll();
+        for (Post post : deletedPosts) {
+            archivePostAfter3Days(post);
+        }
+        this.emailServices.sendSimpleEmail("mahnoud.mbshk@gmail.com", "badwords", "Attention!!!");
+
     }
 
     @Transactional(readOnly = true)
@@ -140,7 +149,7 @@ public class PostServices  implements IPostServices {
         return false;
     }
 
-    @Override
+    /*@Override
     public void awardPostBadges(User user) {
         int postCount = postRepository.countByUserP(user);
         if (postCount > 10) {
@@ -151,21 +160,12 @@ public class PostServices  implements IPostServices {
             user.setPostBadge(BadgeType.BRONZE);
         }
         userRepository.save(user);
-    }
+    }*/
 
     @Override
     public Post getPostById(Long postId) {
         Optional<Post> optionalPost = postRepository.findById(postId);
         return optionalPost.orElse(null);
-    }
-    @Override
-    public void archivePostAfter3Days(Post post) {
-        long currentTimeMillis = System.currentTimeMillis();
-        long deleteTimeMillis = post.getDeletedTime().getTime();
-        long threeDaysInMillis = 3 * 24 * 60 * 60 * 1000;
-        if (post.isDeleted() && (currentTimeMillis - deleteTimeMillis) > threeDaysInMillis) {
-            archivePost(post.getPostId());
-        }
     }
 
     public void archivePost(Long postId) {
@@ -249,7 +249,7 @@ public class PostServices  implements IPostServices {
     }
 
     @Override
-    public void createPostForbidden(long postId, long id) {
+    public void FilterPostwithbadwords(long postId, long id) {
 
 
         //User user = userRepository.findById(id).orElse(null);
@@ -262,14 +262,13 @@ public class PostServices  implements IPostServices {
         String newwcontent = "";
         for (String c : content) {
             System.out.println(c);
-            User user = userRepository.findById(3L).get();
+            User user = userRepository.findById(1L).get();
             System.out.println(user.getPhone());
             Post.setUserP(user);
             postRepository.save(Post);
             for (String forbiddenWord : forbiddenWords) {
                 if (c.contains(forbiddenWord)) {
                     this.emailServices.sendSimpleEmail(user.getEmail(), "badwords", "Attention!!!");
-
                     int alertCount = user.getAlertCount();
                     user.setAlertCount(alertCount + 1);
                     userRepository.save(user);
@@ -294,7 +293,7 @@ public class PostServices  implements IPostServices {
                         Post.setDate(new Date());
                         List<Post> userposts = user.getPostList();
                         userposts.add(Post);
-                        Post.setNlikes(0);
+                        //Post.setNlikes(0);
                         postRepository.save(Post);
                     }
                 }

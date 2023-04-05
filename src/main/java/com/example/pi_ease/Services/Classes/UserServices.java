@@ -13,6 +13,7 @@ import java.util.List;
 public class UserServices implements IUserServices {
     private UserRepository userRepository;
 
+
     @Override
     public User add(User U) {
 
@@ -54,10 +55,19 @@ public class UserServices implements IUserServices {
         userRepository.deleteAll(list);
     }
 
+
     @Override
     public void active(long idUser) {
         User user = userRepository.findById(idUser).get();
         user.setActive(true);
         userRepository.save(user);
     }
+    /*public User findByUsername(String username) {
+        return userRepository.findByUsername(username).get();
+    }*/
+
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username).get();
+    }
+
 }

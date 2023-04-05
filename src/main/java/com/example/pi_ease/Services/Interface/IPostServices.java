@@ -10,6 +10,7 @@ public interface IPostServices {
     Post add(Post P);
     Post edit(Post P);
     List<Post> selectAll();
+    void archivePostAfter3Days(Post post);
     Post selectById(long postId);
     void deleteByID(long postId);
     List<Post>addAll(List<Post> list);
@@ -20,14 +21,12 @@ public interface IPostServices {
     List<Post> trierParPopularite(List<Post> posts);
     public void SharePost(long postId, long id);
     public List<Post> GetSharedPosts(long postId);
-    public void createPostForbidden(long postId, long id);
+    public void FilterPostwithbadwords(long postId, long id);
     public void setForbiddenWords(String words);
     public String getForbiddenWords();
-    void awardPostBadges(User user);
-    public void archivePostAfter3Days(Post post);
+    /*void awardPostBadges(User user);*/
     boolean deletePost(Long postId);
     void deleteOldDeletedPostsDaily();
-    void deleteOldDeletedPosts();
     void archivePost(Long postId);
     public Post getPostById(Long postId);
 

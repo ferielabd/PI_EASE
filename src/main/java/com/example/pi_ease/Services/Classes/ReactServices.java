@@ -26,6 +26,8 @@ public class ReactServices implements IReactServices {
     @Autowired
     UserRepository userRepository ;
 
+
+
     public boolean Decision(Long PostId, Long id) {
         // true =dislike
         // false like
@@ -63,6 +65,7 @@ public class ReactServices implements IReactServices {
                 if (reactByPost.contains(ru)) {
                     int nombre = post.getNlikes();
                     nombre = nombre - 1;
+                    System.out.println(nombre);
                     post.setNlikes(nombre);
                     postlikes.remove(ru);
                     userlikes.remove(ru);
@@ -113,6 +116,11 @@ public class ReactServices implements IReactServices {
             System.out.print("postlikes   final  " + postlikes.size() + "******************************************");
 
         }
+    }
+    @Override
+    public React selectById(int idReaction) {
+
+        return reactRepository.findById(idReaction).get() ;
     }
 
     @Override
@@ -206,10 +214,7 @@ public class ReactServices implements IReactServices {
     }
  
 
-    @Override
-    public React selectById(int idReaction) {
-        return reactRepository.findById(idReaction).get() ;
-    }
+
 
 
     @Override

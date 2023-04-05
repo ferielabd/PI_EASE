@@ -43,10 +43,11 @@ public class Post {
     private Integer voteCount = 0;
     @Nullable
     private String url;
+    private Instant createdDate;
+
     @ManyToOne
     @JsonIgnore
     private User userP ;
-    private Instant createdDate;
 
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy="PostLike")

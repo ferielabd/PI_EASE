@@ -9,9 +9,11 @@ public interface IReactServices {
     React add(React Re);
     React edit(React Re);
 
+
     React selectById(int idReaction);
     void deleteByID (int idReaction);
     void delete(React Re);
+
     List<React>addAll(List<React> list);
     void deleteAll ();
     void LikeDislikePost(int reaction , Long PostId, Long id);
