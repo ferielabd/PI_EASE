@@ -18,9 +18,9 @@ public class ActivitySector implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id_SA")
-    int Id_SA;
+    long id;
     @Column(name = "name")
     String nom;
-   @OneToMany(mappedBy = "activitySector")
-    List<Credit> creditList;
+  /* @OneToMany(mappedBy = "activitySector")
+    List<Credit> creditList;*/
 }

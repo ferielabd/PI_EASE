@@ -238,7 +238,7 @@ public class User {
     @OneToMany (mappedBy = "user")
     List <Notification> emitter;
 
-    @OneToMany(mappedBy = "userCredit")
+  /*  @OneToMany(mappedBy = "userCredit")
     List<Credit> creditList;
 /*
     @OneToMany(mappedBy = "userClaim")

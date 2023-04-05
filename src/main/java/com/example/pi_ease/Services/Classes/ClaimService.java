@@ -100,8 +100,8 @@ public class ClaimService implements IclaimService {
             cl.setRefTR("la transaction numero"+tr.getIdTraction());
             claimRepo.save(cl);
         } else if ((idt == 0) && (idc!=0)){
-            Credit cr =creditRepo.findByIdCAndUserCredit(idc,user);
-            cl.setRefCR("le credit numero"+cr.getIdC());
+            Credit cr =creditRepo.findByIdAndUserCredit(idc,user);
+            cl.setRefCR("le credit numero"+cr.getId());
             claimRepo.save(cl);
         }
         //List<String> badWords = Arrays.asList("aaa", "badword2", "badword3");

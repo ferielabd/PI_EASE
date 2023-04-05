@@ -19,12 +19,7 @@ public class Tranche implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id_T")
-    int Id_T;
+    long id;
 
-    float mon_pay;
-    @Temporal(TemporalType.DATE)
-    Date pay_Date;
 
-    @ManyToOne
-    Credit creditT;
 }

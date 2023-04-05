@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 public interface CreditRepo extends JpaRepository<Credit,Long> {
-    Credit findByIdCAndUserCredit(long idc, User user);
+    Credit findByIdAndUserCredit(long idc, User user);
 
 
 }
