@@ -23,7 +23,7 @@ import javax.transaction.Transactional;
 @Controller
 @RequestMapping("accounts")
 @Transactional
-public class AccountController {
+public class AccountUserController {
 	
 	private final UserRepository userRepository;
 	private final RoleRepository roleRepository;
@@ -32,7 +32,7 @@ public class AccountController {
     private JavaMailSender javaMailSender;
 
 	@Autowired
-    public AccountController(UserRepository userRepository, RoleRepository roleRepository) {
+    public AccountUserController(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
     }
