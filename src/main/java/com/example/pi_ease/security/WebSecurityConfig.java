@@ -2,7 +2,7 @@ package com.example.pi_ease.security;
 
 import com.example.pi_ease.security.jwt.AuthEntryPointJwt;
 import com.example.pi_ease.security.jwt.AuthTokenFilter;
-import com.example.pi_ease.security.services.UserDetailsServiceImpl;
+import com.example.pi_ease.Services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

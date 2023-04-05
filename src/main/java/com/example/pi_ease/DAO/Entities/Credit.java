@@ -21,7 +21,7 @@ public class Credit extends BaseEntity  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_C")
-    int Id;
+    long Id;
 
     @Column(name="INSTALLMENT_COUNT",nullable = false)
      Integer installmentCount;

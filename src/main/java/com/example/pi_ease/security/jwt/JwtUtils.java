@@ -1,7 +1,7 @@
 package com.example.pi_ease.security.jwt;
 import java.util.Date;
 
-import com.example.pi_ease.security.services.UserDetailsImpl;
+import com.example.pi_ease.Services.UserDetailsImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

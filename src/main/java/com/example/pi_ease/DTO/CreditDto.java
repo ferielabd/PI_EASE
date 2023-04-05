@@ -4,91 +4,102 @@ import com.example.pi_ease.DAO.Entities.CreditStatusType;
 import lombok.Data;
 
 
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
 public class CreditDto {
 
-    int IdC;
+    long Id;
 
-    LocalDate D_Date;
-    LocalDate due_date;
-    LocalDate OB_Date;
-    float taux_interet;
-    BigDecimal montant_demander;
+    Integer installmentCount;
 
-    BigDecimal monPP;
+    BigDecimal principalLoanAmount;
 
-    BigDecimal RestApay;
+    BigDecimal monthlyInstallmentAmount;
+
+    BigDecimal interestToBePaid;
+
+    BigDecimal principalToBePaid;
+
+    BigDecimal remainingPrincipal;
+
+    LocalDate dueDate;
+
+
     CreditStatusType creditStatusType;
+
     String attachment;
 
 
     String Description;
 
-    public int getIdC() {
-        return IdC;
+    public long getId() {
+        return Id;
     }
 
-    public void setIdC(int idC) {
-        IdC = idC;
+    public void setId(long id) {
+        Id = id;
     }
 
-    public LocalDate getD_Date() {
-        return D_Date;
+    public Integer getInstallmentCount() {
+        return installmentCount;
     }
 
-    public void setD_Date(LocalDate d_Date) {
-        D_Date = d_Date;
+    public void setInstallmentCount(Integer installmentCount) {
+        this.installmentCount = installmentCount;
     }
 
-    public LocalDate getDue_date() {
-        return due_date;
+    public BigDecimal getPrincipalLoanAmount() {
+        return principalLoanAmount;
     }
 
-    public void setDue_date(LocalDate due_date) {
-        this.due_date = due_date;
+    public void setPrincipalLoanAmount(BigDecimal principalLoanAmount) {
+        this.principalLoanAmount = principalLoanAmount;
     }
 
-    public LocalDate getOB_Date() {
-        return OB_Date;
+    public BigDecimal getMonthlyInstallmentAmount() {
+        return monthlyInstallmentAmount;
     }
 
-    public void setOB_Date(LocalDate OB_Date) {
-        this.OB_Date = OB_Date;
+    public void setMonthlyInstallmentAmount(BigDecimal monthlyInstallmentAmount) {
+        this.monthlyInstallmentAmount = monthlyInstallmentAmount;
     }
 
-    public float getTaux_interet() {
-        return taux_interet;
+    public BigDecimal getInterestToBePaid() {
+        return interestToBePaid;
     }
 
-    public void setTaux_interet(float taux_interet) {
-        this.taux_interet = taux_interet;
+    public void setInterestToBePaid(BigDecimal interestToBePaid) {
+        this.interestToBePaid = interestToBePaid;
     }
 
-    public BigDecimal getMontant_demander() {
-        return montant_demander;
+    public BigDecimal getPrincipalToBePaid() {
+        return principalToBePaid;
     }
 
-    public void setMontant_demander(BigDecimal montant_demander) {
-        this.montant_demander = montant_demander;
+    public void setPrincipalToBePaid(BigDecimal principalToBePaid) {
+        this.principalToBePaid = principalToBePaid;
     }
 
-    public BigDecimal getMonPP() {
-        return monPP;
+    public BigDecimal getRemainingPrincipal() {
+        return remainingPrincipal;
     }
 
-    public void setMonPP(BigDecimal monPP) {
-        this.monPP = monPP;
+    public void setRemainingPrincipal(BigDecimal remainingPrincipal) {
+        this.remainingPrincipal = remainingPrincipal;
     }
 
-    public BigDecimal getRestApay() {
-        return RestApay;
+    public LocalDate getDueDate() {
+        return dueDate;
     }
 
-    public void setRestApay(BigDecimal restApay) {
-        RestApay = restApay;
+    public void setDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
     }
 
     public CreditStatusType getCreditStatusType() {

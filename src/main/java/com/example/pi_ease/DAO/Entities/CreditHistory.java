@@ -24,7 +24,7 @@ public class CreditHistory extends BaseEntity {
     @OneToMany(mappedBy = "creditHistory",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Credit> Credits;
 
-    public void setId(int id) {
+    public void setId(long id) {
         Id = id;
     }
 

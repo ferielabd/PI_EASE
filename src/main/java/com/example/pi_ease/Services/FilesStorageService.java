@@ -1,4 +1,4 @@
-package com.example.pi_ease.security.services;
+package com.example.pi_ease.Services;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 

@@ -15,7 +15,6 @@ import java.time.temporal.ChronoUnit;
 
 @Service
 @Transactional
-
 public class CreditService {
 
     private final CreditValidationService creditValidationService;
@@ -134,7 +133,6 @@ public class CreditService {
     public CreditDto applyLoan(CrApplyCreditDto loaLoanApplyLoanDto) {
 
         creditValidationService.controlIsParameterNotNull(loaLoanApplyLoanDto);
-        User user = authController.getCurrentUser();
         BigDecimal principalLoanAmount = loaLoanApplyLoanDto.getPrincipalLoanAmount();
         Integer installment = loaLoanApplyLoanDto.getInstallmentCount();
         BigDecimal installmentCount = BigDecimal.valueOf(installment);
@@ -168,6 +166,7 @@ public class CreditService {
         creditValidationService.controlIsInstallmentCountNotGreaterThanInstallmentCountLimit(installment,INSTALLMENT_COUNT_LIMIT);
 
 
+        User user = authController.getCurrentUser();
 
         credit. setUserCredit(user);
         credit.setMonthlyInstallmentAmount(monthlyInstallmentAmount);
@@ -237,7 +236,7 @@ public class CreditService {
 
         CrPayInstallmentResponseDto loaPayInstallmentResponseDto = new CrPayInstallmentResponseDto();
 
-        //***---loaPayInstallmentResponseDto.setLoanId(loanId);
+        loaPayInstallmentResponseDto.setIdCr(loanId);
         loaPayInstallmentResponseDto.setPaymentAmount(paymentAmount);
         loaPayInstallmentResponseDto.setPaymentDate(PaymentDate);
         loaPayInstallmentResponseDto.setRemainingPrincipal(remainingPrincipal);

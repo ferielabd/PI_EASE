@@ -6,18 +6,18 @@ import java.time.LocalDate;
 
 @Data
 public class CrPayInstallmentResponseDto {
-    private int IdCrPay;
+    private int IdCr;
     private BigDecimal paymentAmount;
     private LocalDate PaymentDate;
     private BigDecimal remainingPrincipal;
     private LocalDate dueDate;
 
-    public int getIdCrPay() {
-        return IdCrPay;
+    public int getIdCr() {
+        return IdCr;
     }
 
-    public void setIdCrPay(int idCrPay) {
-        IdCrPay = idCrPay;
+    public void setIdCr(int idCrPay) {
+        IdCr = idCrPay;
     }
 
     public BigDecimal getPaymentAmount() {

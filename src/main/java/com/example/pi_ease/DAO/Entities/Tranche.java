@@ -21,7 +21,7 @@ public class Tranche extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id_T")
-    int id;
+    long id;
 
 
     @Column(name="PAYMENT_AMOUNT", precision = 19 ,scale =2 ,nullable = false)
@@ -33,7 +33,7 @@ public class Tranche extends BaseEntity {
     @ManyToOne
     Credit creditT;
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
