@@ -20,8 +20,8 @@ public class Room {
     int idRoom;
     @Temporal(TemporalType.DATE)
     Date dateR ;
-    @OneToMany(mappedBy = "roomM")
-    List<Message> Listmsg;
+    /*@OneToMany(mappedBy = "roomM")
+    List<Message> Listmsg;*/
     @OneToMany(mappedBy = "room")
     List<User>Listuser;
 

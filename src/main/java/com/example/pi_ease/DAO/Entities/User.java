@@ -285,3 +285,8 @@ public class User {
     List<Message> messageList;
 
 }
+
+    public String getFirstName() {
+        return firstname ;
+    };
+}

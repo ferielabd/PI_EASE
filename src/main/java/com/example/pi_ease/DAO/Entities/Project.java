@@ -96,3 +96,7 @@ public class Project implements Serializable {
     }
 
 }
+
+    @ManyToOne
+    Category category;
+}

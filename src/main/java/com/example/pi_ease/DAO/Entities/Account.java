@@ -1,6 +1,4 @@
 package com.example.pi_ease.DAO.Entities;
-
-
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
