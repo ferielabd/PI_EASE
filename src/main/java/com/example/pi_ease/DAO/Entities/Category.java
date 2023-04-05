@@ -23,10 +23,5 @@ public class Category{
     int idC;
 
     String name;
-    @ManyToOne
-    Category cat;
-    @OneToMany(mappedBy = "cat")
-    List<Category> listCategory;
-    @OneToMany(mappedBy = "category")
-    List<Project> projectList;
+
 }
