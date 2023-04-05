@@ -20,7 +20,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -56,7 +59,7 @@ public class AuthController {
 	JwtUtils jwtUtils;
 	@Autowired(required = true)
     private JavaMailSender javaMailSender;
-
+	
 
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -79,6 +82,14 @@ public class AuthController {
 												 roles));
 	}
 
+
+	@Transactional(readOnly = true)
+	public User getCurrentUser() {
+		Jwt principal = (Jwt) SecurityContextHolder.
+				getContext().getAuthentication().getPrincipal();
+		return userRepository.findByUsername(principal.getSubject())
+				.orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getSubject()));
+	}
 	@PostMapping("/signup/{email}")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest, @PathVariable ("email") String email ) {
 		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
@@ -92,7 +103,6 @@ public class AuthController {
 					.badRequest()
 					.body(new MessageResponse("Error: Email is already in use!"));
 		}
-
 		// Create new user's account
 		User user = new User(signUpRequest.getUsername(), 
 							 signUpRequest.getEmail(),
@@ -199,5 +209,4 @@ public class AuthController {
 	        javaMailSender.send(msg);
 
 	    }
-
 }

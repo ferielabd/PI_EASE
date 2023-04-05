@@ -1,5 +1,8 @@
 package com.example.pi_ease.DAO.Entities;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
@@ -8,6 +11,8 @@ import java.util.Set;
 import javax.persistence.*;
 
 
+@Getter
+@Setter
 @Entity
 @Table(	name = "user",
         uniqueConstraints = {
@@ -46,6 +51,8 @@ public class User {
     private int active;
 
     private int verifier;
+
+    private boolean enabled;
 
     private BigDecimal salaire;
 
