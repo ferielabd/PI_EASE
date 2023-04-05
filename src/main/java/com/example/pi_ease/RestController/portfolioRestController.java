@@ -39,5 +39,22 @@ public class portfolioRestController {
     public void deleteById(@RequestParam int idInv){
         iPortfolioService.deleteById(idInv);
     }
+    @GetMapping("/afficherTotalInvesting/{idP}")
+    public double getTotalInvestmentValue(@PathVariable int idP){
+        return iPortfolioService.getTotalInvestmentValue(idP);
+    }
+    @GetMapping("/{id}/total-people-lifted-out-of-poverty")
+    public int getTotalPeopleLiftedOutOfPoverty(@PathVariable("id") int portfolioId) {
+        return iPortfolioService.getTotalPeopleLiftedOutOfPoverty(portfolioId);
+    }
 
+    @GetMapping("/{id}/total-jobs-created")
+    public int getTotalJobsCreated(@PathVariable("id") int portfolioId) {
+        return iPortfolioService.getTotalJobsCreated(portfolioId);
+    }
+
+    @GetMapping("/{id}/total-women-entrepreneurs-supported")
+    public int getTotalWomenEntrepreneursSupported(@PathVariable("id") int portfolioId) {
+        return iPortfolioService.getTotalWomenEntrepreneursSupported(portfolioId);
+    }
 }

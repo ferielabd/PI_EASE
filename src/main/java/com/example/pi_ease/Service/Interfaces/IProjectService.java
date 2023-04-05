@@ -13,6 +13,7 @@ public interface IProjectService {
     void delete(Project project);
     List<Project> addAll(List<Project>listProject);
     void deleteAll(List<Project> listProject);
+    List<Project> getProjectsSortedByROIScore();
 
 
 }

@@ -1,5 +1,6 @@
 package com.example.pi_ease.Service.Class;
 
+import com.example.pi_ease.DAO.Entities.Investment;
 import com.example.pi_ease.DAO.Entities.Portfolio;
 import com.example.pi_ease.Repositories.PortfolioRepository;
 import com.example.pi_ease.Service.Interfaces.IPortfolioService;
@@ -53,5 +54,47 @@ public class PortfolioService implements IPortfolioService {
         portfolioRepository.deleteAll(listPortfolio);
 
 
+    }
+
+    @Override
+    public double getTotalInvestmentValue(int portfolioId) {
+        Portfolio portfolio = portfolioRepository.findPortfolioByPort(portfolioId);
+
+
+        double totalValue = 0;
+        for (Investment investment : portfolio.getInvestments()) {
+            totalValue += investment.getAmount() ;
+        }
+        return totalValue;
+    }
+
+    @Override
+    public int getTotalPeopleLiftedOutOfPoverty(int portfolioId) {
+        Portfolio portfolio = portfolioRepository.findPortfolioByPort(portfolioId);
+        int total = 0;
+        for (Investment investment : portfolio.getInvestments()) {
+            if (investment.getProject() != null) {
+                total += investment.getProject().getPeopleLiftedOutOfPoverty();
+            }
+        }
+        return total;    }
+
+    @Override
+    public int getTotalJobsCreated(int portfolioId) {
+        Portfolio portfolio = portfolioRepository.findPortfolioByPort(portfolioId);
+        int total = 0;
+        for (Investment investment : portfolio.getInvestments()) {
+            total += investment.getProject().getJobsCreated();
+        }
+        return total;    }
+
+    @Override
+    public int getTotalWomenEntrepreneursSupported(int portfolioId) {
+        Portfolio portfolio = portfolioRepository.findPortfolioByPort(portfolioId);
+        int total = 0;
+        for (Investment investment : portfolio.getInvestments()) {
+            total += investment.getProject().getWomenEntrepreneursSupported();
+        }
+        return total;
     }
 }

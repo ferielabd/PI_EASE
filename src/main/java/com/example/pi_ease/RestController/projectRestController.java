@@ -16,13 +16,14 @@ public class projectRestController {
     public List<Project> afficher(){
         return iProjectService.selectAll();
     }
+
     @PostMapping("/addProject")
     public Project add( @RequestBody Project project){
         return iProjectService.add(project);    }
-    @GetMapping("/addProjectWithId")
+    /*@GetMapping("/addProjectWithId")
     public Project addProjectWithId(@PathVariable int idP){
         return iProjectService.selectByID(idP);
-    }
+    }*/
     @PostMapping("/addProjectAllProject")
     public List<Project> addAll(@RequestBody List<Project> list){
         return iProjectService.addAll(list);
@@ -40,4 +41,7 @@ public class projectRestController {
         iProjectService.deleteById(idP);
     }
 
+    @GetMapping("/sortedByROIScore")
+    public List<Project> getProjectsSortedByROIScore(){        return iProjectService.getProjectsSortedByROIScore();
+    }
 }

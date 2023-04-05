@@ -1,10 +1,13 @@
 package com.example.pi_ease.DAO.Entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -58,13 +61,28 @@ public class User implements Serializable {
 
     @OneToMany
     List<Transaction> transactionR;
-    @ManyToMany(mappedBy = "listUsersI")
-    List<Project> listProjectI;
-    @OneToMany(mappedBy = "userClient")
-    List<Project> projectListC;
+    /*@ManyToMany(mappedBy = "listUsersI")
+    List<Project> listProjectI;*/
+    /*@OneToMany(mappedBy = "userClient")
+    List<Project> projectListC;*/
 
-    @OneToOne
-    Portfolio portfolio;
+    //(mappedBy = "userClient")
+    // @JsonManagedReference
+    @OneToMany
+
+    List<Project> projectList;
+
+    // @JsonIgnore
+    //@OneToMany(mappedBy = "userInvestor")
+    //@JsonIgnore
+    //List<Investment> investmentList;
+
+    @OneToMany(mappedBy = "userInvestor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
+    private List<Investment> investmentList = new ArrayList<>();
+
+   /* @OneToOne
+    Portfolio portfolio;*/
 
     @ManyToOne
     Reaction reaction ;

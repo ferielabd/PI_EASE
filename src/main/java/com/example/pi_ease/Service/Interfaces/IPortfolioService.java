@@ -13,5 +13,9 @@ public interface IPortfolioService {
     void delete(Portfolio portfolio);
     List<Portfolio> addAll(List<Portfolio>listPortfolio);
     void deleteAll(List<Portfolio> listPortfolio);
+    double getTotalInvestmentValue(int portfolioId);
+    int getTotalPeopleLiftedOutOfPoverty(int portfolioId);
 
+    int getTotalJobsCreated(int portfolioId);
+    int getTotalWomenEntrepreneursSupported(int portfolioId);
 }

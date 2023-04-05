@@ -6,6 +6,7 @@ import com.example.pi_ease.Service.Interfaces.IProjectService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -53,4 +54,25 @@ public class ProjectService implements IProjectService {
         projectRepository.deleteAll(listProject);
 
     }
+
+    @Override
+    public List<Project> getProjectsSortedByROIScore() {
+        List<Project> projects = projectRepository.findAll();
+        List<Project> projectsWithROIScore = new ArrayList<>();
+
+        // Calculate ROI score for each project
+        for (Project project : projects) {
+            if (project.getCurrentInvestingAmount() > 0 && project.getNetRevenueProject() > 0) {
+                double roi = (double) project.getNetRevenueProject() / project.getCostProject();
+                project.setRoiScore(roi);
+            } else {
+                project.setRoiScore(0);
+            }
+            projectsWithROIScore.add(project);
+        }
+
+        // Sort projects by ROI score
+        projectsWithROIScore.sort((p1, p2) -> Double.compare(p2.getRoiScore(), p1.getRoiScore()));
+
+        return projectsWithROIScore;    }
 }
