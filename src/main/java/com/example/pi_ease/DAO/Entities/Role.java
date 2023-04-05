@@ -8,8 +8,6 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -20,7 +18,25 @@ public class Role implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    private long id;
+
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
     private TypeRole name;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public TypeRole getName() {
+        return name;
+    }
+
+    public void setName(TypeRole name) {
+        this.name = name;
+    }
 }

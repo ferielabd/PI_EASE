@@ -1,19 +1,17 @@
 package com.example.pi_ease.DAO.Entities;
 
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
-import javax.persistence.*;
-import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
-@Getter
-@Setter
+
 @Entity
 @Table(	name = "user",
         uniqueConstraints = {
@@ -32,7 +30,7 @@ public class User {
 
     private String lastname;
 
-    private String birthday;
+    private LocalDate birthday;
 
 
     private String country;
@@ -53,10 +51,7 @@ public class User {
 
     private int verifier;
 
-    private boolean enabled;
-
     private BigDecimal salaire;
-    private int count;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(	name = "user_roles",
@@ -78,7 +73,7 @@ public class User {
     }
 
 
-    public User(Long id, String username, String firstname, String lastname, String birthday, String country,
+    public User(Long id, String username, String firstname, String lastname, LocalDate birthday, String country,
                 String zipcode,  String email, String password, String nomImageidentity, String nomImageselfie,
                 int active, Set<Role> roles) {
         super();
@@ -99,7 +94,7 @@ public class User {
 
 
 
-    public User(Long id, String username, String firstname, String lastname, String birthday, String country,
+    public User(Long id, String username, String firstname, String lastname, LocalDate birthday, String country,
                 String zipcode,  String email, String password, String nomImageidentity, String nomImageselfie,
                 int active, int verifier, Set<Role> roles) {
         super();
@@ -151,11 +146,11 @@ public class User {
         this.lastname = lastname;
     }
 
-    public String getBirthday() {
+    public LocalDate getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(String birthday) {
+    public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
     }
 
@@ -238,11 +233,11 @@ public class User {
     @OneToMany (mappedBy = "user")
     List <Notification> emitter;
 
-  /*  @OneToMany(mappedBy = "userCredit")
+    @OneToMany(mappedBy = "userCredit")
     List<Credit> creditList;
-/*
-    @OneToMany(mappedBy = "userClaim")
-    List<Claim> claimList;*/
+
+    @OneToMany(mappedBy = "userc")
+    List<Claim> claimList;
 
     @ManyToMany(mappedBy = "userAcc")
     List<Account>  accountList;
@@ -271,4 +266,6 @@ public class User {
     @OneToMany(mappedBy = "userpost")
     List<Post> postList;
     @OneToMany
-    List<Message> messageList;}
+    List<Message> messageList;
+
+}
