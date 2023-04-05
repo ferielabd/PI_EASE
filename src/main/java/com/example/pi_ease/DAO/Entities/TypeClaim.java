@@ -1,6 +1,6 @@
 package com.example.pi_ease.DAO.Entities;
 
-public enum TypeCL {
+public enum TypeClaim {
 
     TRANSACTION,CREDIT,ACCOUNT
 }
