@@ -1,5 +1,6 @@
 package com.example.pi_ease.DAO.Entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -7,9 +8,9 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
+
+import java.util.ArrayList;
+
 
 
 @Entity
@@ -247,13 +248,28 @@ public class User {
 
     @OneToMany
     List<Transaction> transactionR;
-    @ManyToMany(mappedBy = "listUsersI")
-    List<Project> listProjectI;
-    @OneToMany(mappedBy = "userClient")
-    List<Project> projectListC;
+    /*@ManyToMany(mappedBy = "listUsersI")
+    List<Project> listProjectI;*/
+    /*@OneToMany(mappedBy = "userClient")
+    List<Project> projectListC;*/
 
-    @OneToOne
-    Portfolio portfolio;
+    //(mappedBy = "userClient")
+    // @JsonManagedReference
+    @OneToMany
+
+    List<Project> projectList;
+
+    // @JsonIgnore
+    //@OneToMany(mappedBy = "userInvestor")
+    //@JsonIgnore
+    //List<Investment> investmentList;
+
+    @OneToMany(mappedBy = "userInvestor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
+    private List<Investment> investmentList = new ArrayList<>();
+
+   /* @OneToOne
+    Portfolio portfolio;*/
 
     @ManyToOne
     Reaction reaction ;
