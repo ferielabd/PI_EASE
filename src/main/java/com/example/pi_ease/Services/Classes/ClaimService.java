@@ -70,7 +70,7 @@ public class ClaimService implements IclaimService {
     }
 
     @Override
-    public void ajouter(MultipartFile file, String desc, TypeClaim type, int idt , int idc) {
+    public void ajouter(MultipartFile file, String desc, TypeClaim type, int idt , long idc) {
         Claim cl =new Claim();
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         if(fileName.contains(".."))

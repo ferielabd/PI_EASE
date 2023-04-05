@@ -14,7 +14,7 @@ public interface IclaimService {
     Claim add(/*MultipartFile file,*/ Claim cl);
     Claim edit(Claim cl);
     void modifier(Integer id,boolean traite)throws TemplateException, MessagingException, IOException;
-    void ajouter (MultipartFile file, String desc, TypeClaim type, int idt, int idc);
+    void ajouter (MultipartFile file, String desc, TypeClaim type, int idt, long idc);
     List<Claim> selectAll();
     Claim selectById(Integer id);
     void deleteById(Integer id);
