@@ -8,42 +8,35 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Role implements Serializable {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    private long id;
+
+    private long id;
+
     @Enumerated(EnumType.STRING)
-    TypeRole typeRole;
+    @Column(length = 20)
+    private TypeRole name;
 
-    public Role() {
-    }
-
-    public Role(TypeRole typeRole) {
-        this.typeRole = typeRole;
-    }
-
-    public Integer getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public TypeRole getTypeRole() {
-        return typeRole;
+    public TypeRole getName() {
+        return name;
     }
 
-    public void setTypeRole(TypeRole typeRole) {
-        this.typeRole = typeRole;
+    public void setName(TypeRole name) {
+        this.name = name;
     }
-
-
 }

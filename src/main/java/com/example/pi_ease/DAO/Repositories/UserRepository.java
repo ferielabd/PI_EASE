@@ -1,27 +1,19 @@
 package com.example.pi_ease.DAO.Repositories;
 
-import com.example.pi_ease.DAO.Entities.TypeUser;
-import com.example.pi_ease.DAO.Entities.User;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-
-import java.time.Instant;
 import java.util.Optional;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface UserRepository extends JpaRepository<User,Long> {
+import com.example.pi_ease.DAO.Entities.User;
 
+@Repository
+public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
 
+    Boolean existsByUsername(String username);
 
-    boolean existsByUsername(String username);
+    Boolean existsByEmail(String email);
 
-    boolean existsByMail(String mail);
-
-    Optional<User> findByMail(String mail);
 
 }
-
-
-

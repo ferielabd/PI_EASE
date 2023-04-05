@@ -1,7 +1,6 @@
 package com.example.pi_ease.DAO.Entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import javafx.geometry.Pos;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.lang.Nullable;
