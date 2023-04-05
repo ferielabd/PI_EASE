@@ -6,12 +6,14 @@ import com.example.pi_ease.DAO.Repositories.CreditRepo;
 import com.example.pi_ease.DAO.Repositories.TransactionRepo;
 import com.example.pi_ease.DAO.Repositories.UserRepo;
 import com.example.pi_ease.Services.Interface.IclaimService;
+import freemarker.template.TemplateException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.MessagingException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -28,7 +30,8 @@ public class ClaimService implements IclaimService {
     private CreditRepo creditRepo;
     private ClaimRepo claimRepo;
     private EmailService emailService;
-
+    @Autowired
+    private com.example.pi_ease.Services.Interface.EmailService emailServiceM;
     @Override
     public Claim add(Claim cl) {
 
@@ -41,16 +44,16 @@ public class ClaimService implements IclaimService {
     }
 
     @Override
-    public void modifier(Integer id, boolean traite) {
+    public void modifier(Integer id, boolean traite)throws TemplateException, MessagingException, IOException {
         Claim cl =claimRepo.findById(id).get();
         cl.setTraiteClaim(traite);
         Calendar cal = Calendar.getInstance();
         Date datetraite=cal.getTime();
         cl.setDateTraite(datetraite);
-        String user =cl .getUserc().getMail();
+        User user =cl.getUserc();
         claimRepo.save(cl);
-        this.emailService.sendSimpleEmail(user, "Status of your claim", "your complaint is processed");
-
+        // this.emailService.sendSimpleEmail(user, "Status of your claim", "your complaint is processed");
+        emailServiceM.sendEmailRegister(user);
     }
     @Override
     public String getForbiddenWords() {
@@ -88,7 +91,7 @@ public class ClaimService implements IclaimService {
         Date dateclaim=cal.getTime();
         cl.setDateClaim(dateclaim);
 
-        User user = userRepository.findById(9758826L).get();
+        User user = userRepository.findById(1L).get();
         cl.setUserc(user);
         claimRepo.save(cl);
         cl.setRefclaim(String.valueOf(cl.getIdClaim())+"."+cl.getDateClaim());
@@ -119,9 +122,9 @@ public class ClaimService implements IclaimService {
                 claimRepo.save(cl);
                 if (alertCount >= 3) {
 
-                    user.setActive(false);
+                    user.setActive(0);
                     userRepository.save(user);
-                    this.emailService.sendSimpleEmail(user.getMail(),"Account blocked", "your account is now blocked due to your bad behaviour ");
+                    this.emailService.sendSimpleEmail(user.getEmail(),"Account blocked", "your account is now blocked due to your bad behaviour ");
                 }
 
             }
