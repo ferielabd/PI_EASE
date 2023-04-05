@@ -19,19 +19,21 @@ import java.util.List;
 public class Account implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int idA;
-    float amount;
+    int idAccount;
+    double solde;
     String rib;
     @Temporal(TemporalType.DATE)
     Date openDate;
     String state;
+
     @Enumerated(EnumType.STRING)
     TypeAccount typeAccount;
-    @ManyToMany(mappedBy = "accountList",cascade = CascadeType.ALL)
-    List<Transaction> transactionList;
+    //@ManyToMany(mappedBy = "accountList")
+    //List<Transaction> transactionList;
     @OneToOne(mappedBy = "accounts")
     Checks checks;
 
     @ManyToMany
     List<User> userAcc;
+
 }

@@ -246,7 +246,7 @@ public class User {
     @OneToMany
     List<Transaction> transactionE;
 
-    @OneToMany
+    @OneToMany(mappedBy = "user")
     List<Transaction> transactionR;
     /*@ManyToMany(mappedBy = "listUsersI")
     List<Project> listProjectI;*/

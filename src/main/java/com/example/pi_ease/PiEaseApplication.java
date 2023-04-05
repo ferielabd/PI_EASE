@@ -1,5 +1,8 @@
 package com.example.pi_ease;
 
+import com.example.pi_ease.DAO.Config.twilioConfig;
+import com.twilio.Twilio;
+import org.springframework.beans.factory.annotation.Autowired;
 import java.io.File;
 import java.io.IOException;
 
@@ -11,14 +14,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableScheduling;
+
+import javax.annotation.PostConstruct;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.mail.javamail.JavaMailSender;
 
 
 
 @SpringBootApplication
+@EnableScheduling
+  
 
 public class PiEaseApplication extends SpringBootServletInitializer implements CommandLineRunner{
+     //@Autowired
+    //private twilioConfig twilioconfig;
+
+    //@PostConstruct
+    //public void initTwilio(){
+      //  Twilio.init(twilioconfig.getAccountSid(),twilioconfig.getAuthToken());
+    //}
     @Resource
     FilesStorageService storageService;
     @Autowired
