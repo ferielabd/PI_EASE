@@ -1,21 +1,18 @@
 package com.example.pi_ease.RestController;
 
 import com.example.pi_ease.DAO.Entities.Transaction;
-import com.example.pi_ease.Services.Classes.EmailServices;
+import com.example.pi_ease.Services.Classes.EmailService;
 import com.example.pi_ease.Services.Interfaces.ITransactionService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
 import java.util.List;
 @RestController
 @AllArgsConstructor
 
 public class TransactionRest {
     private ITransactionService iTransactionService;
-    private EmailServices emailServices;
+    private EmailService emailServices;
 
     @GetMapping("/afficherTransaction")
     public List<Transaction> afficher() {
@@ -71,9 +68,9 @@ public class TransactionRest {
     public double convertirEuroEnDinar(@PathVariable double montant) {
         return iTransactionService.convertirEuroEnDinar(montant);
     }
-    @PostMapping("/message")
-    String sendEmailMessage() {
-        this.emailServices.sendSimpleEmail(5);
+    @PostMapping("/message/{transactionId}")
+    String sendEmailMessage(@PathVariable int transactionId) {
+        this.emailServices.sendSimpleEmail( transactionId);
         return "Message sent";
     }
 }

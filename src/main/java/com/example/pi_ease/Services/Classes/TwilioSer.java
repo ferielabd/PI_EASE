@@ -1,7 +1,10 @@
 package com.example.pi_ease.Services.Classes;
 
 import com.example.pi_ease.DAO.Config.twilioConfig;
+import com.example.pi_ease.DAO.Entities.SmsRequest;
+import com.example.pi_ease.Services.Interfaces.SmsSender;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
@@ -9,13 +12,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-@Service
+@org.springframework.stereotype.Service
 public class TwilioSer {
+    private final SmsSender smsSender;
+
     @Autowired
-    private twilioConfig twilioConfig;
+    public TwilioSer(@Qualifier("twilio") TwilioSmsSender smsSender) {
+        this.smsSender = smsSender;
+    }
 
-    Map<String, String> otpMap = new HashMap<>();
-
+    public void sendSms(SmsRequest smsRequest) {
+        smsSender.sendSms(smsRequest);
+    }
     //public Mono<PasswordResetResponseDto> sendOTPForPasswordReset(PasswordResetRequestDto passwordResetRequestDto) {
 //
   //      PasswordResetResponseDto passwordResetResponseDto = null;
@@ -46,9 +54,6 @@ public class TwilioSer {
     //}
 
     //6 digit otp
-    private String generateOTP() {
-        return new DecimalFormat("000000")
-                .format(new Random().nextInt(999999));
-    }
+
 
 }
