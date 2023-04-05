@@ -1,4 +1,4 @@
-package com.example.pi_ease.Services;
+package com.example.pi_ease.security.services;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-import com.example.pi_ease.Services.FilesStorageService;
+import com.example.pi_ease.security.services.FilesStorageService;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;

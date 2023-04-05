@@ -2,7 +2,7 @@ package com.example.pi_ease.security;
 
 import com.example.pi_ease.security.jwt.AuthEntryPointJwt;
 import com.example.pi_ease.security.jwt.AuthTokenFilter;
-import com.example.pi_ease.Services.UserDetailsServiceImpl;
+import com.example.pi_ease.security.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -58,7 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/Users/**").permitAll()
-                // .antMatchers("/**").permitAll()
+                 .antMatchers("/**").permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

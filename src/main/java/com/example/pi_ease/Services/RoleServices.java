@@ -3,6 +3,7 @@ package com.example.pi_ease.Services;
 import com.example.pi_ease.DAO.Entities.Role;
 import com.example.pi_ease.DAO.Repositories.RoleRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class RoleServices implements IRoleService{
+    @Autowired
     private RoleRepository roleRepository;
     @Override
     public Role add(Role r) {

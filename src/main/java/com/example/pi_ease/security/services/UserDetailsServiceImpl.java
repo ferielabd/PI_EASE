@@ -1,6 +1,6 @@
-package com.example.pi_ease.Services;
+package com.example.pi_ease.security.services;
 
-import com.example.pi_ease.Services.UserDetailsImpl;
+import com.example.pi_ease.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
