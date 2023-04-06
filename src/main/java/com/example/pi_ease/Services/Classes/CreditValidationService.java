@@ -154,6 +154,7 @@ public class CreditValidationService {
     }
 
     public void controlIsLoanNotAlreadyPaidOff(Credit loaLoan) {
+        System.out.println(loaLoan.getCreditStatusType());
         if (loaLoan.getCreditStatusType() == CreditStatusType.PAID) {
             throw new IllegalFieldException(CreditErrorMessage.LOAN_ALREADY_PAID_OFF);
         }

@@ -2,6 +2,7 @@ package com.example.pi_ease.RestControllers;
 
 
 
+import com.example.pi_ease.DAO.Entities.Credit;
 import com.example.pi_ease.DTO.*;
 import com.example.pi_ease.Services.Classes.CreditDecisionService;
 import com.example.pi_ease.Services.Classes.CreditService;
@@ -12,6 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -28,11 +32,12 @@ public class CreditController {
             description = "Calculate the loan."
     )
     @GetMapping("/calculate-loan")
-    public ResponseEntity<RestResponse<CrCalculateCreditResponseDto>> calculateLoan(@RequestParam Integer installmentCount, @RequestParam BigDecimal principalLoanAmount) {
+    public BigDecimal /*ResponseEntity<RestResponse<CrCalculateCreditResponseDto>>*/ calculateLoan(@RequestParam Integer installmentCount, @RequestParam BigDecimal principalLoanAmount) {
 
-        CrCalculateCreditResponseDto loaCalculateLoanResponseDto = service.calculateLoan(installmentCount, principalLoanAmount);
+       // CrCalculateCreditResponseDto
+                BigDecimal loaCalculateLoanResponseDto = service.calculateLoan(installmentCount, principalLoanAmount);
 
-        return ResponseEntity.ok(RestResponse.of(loaCalculateLoanResponseDto));
+        return loaCalculateLoanResponseDto;
     }
 
     @Operation(
@@ -41,11 +46,12 @@ public class CreditController {
             description = "Calculate the late fee."
     )
     @GetMapping("/calculate-late-fee/{id}")
-    public ResponseEntity<RestResponse<CrCalculateLateFeeResponseDto>> calculateLateFee(@PathVariable Long id) {
+    public BigDecimal /*ResponseEntity<RestResponse<CrCalculateLateFeeResponseDto>>*/ calculateLateFee(@PathVariable Long id) {
 
-        CrCalculateLateFeeResponseDto loaCalculateLateFeeResponseDto = service.calculateLateFee(id);
+        BigDecimal loaCalculateLateFeeResponseDto = service.calculateLateFee(id);
 
-        return ResponseEntity.ok(RestResponse.of(loaCalculateLateFeeResponseDto));
+        //return ResponseEntity.ok(RestResponse.of(loaCalculateLateFeeResponseDto));
+        return loaCalculateLateFeeResponseDto;
     }
 
     @Operation(
@@ -54,11 +60,11 @@ public class CreditController {
             description = "Gets a loan by id."
     )
     @GetMapping("/{id}")
-    public ResponseEntity<RestResponse<CreditDto>> findLoanById(@PathVariable Long id) {
+    public Credit findLoanById(@PathVariable Long id) {
 
-        CreditDto loaLoanDto = service.findLoanById(id);
+        Credit loaLoanDto = service.findLoanById(id);
 
-        return ResponseEntity.ok(RestResponse.of(loaLoanDto));
+        return loaLoanDto;
     }
 
     @Operation(
@@ -67,11 +73,14 @@ public class CreditController {
             description = "Apply for a loan."
     )
     @PostMapping("/apply-loan")
-    public ResponseEntity<RestResponse<CreditDto>> applyLoan(@RequestBody CrApplyCreditDto loaApplyLoanDto) {
+    public ResponseEntity<?> applyLoan(@RequestBody CrApplyCreditDto loaApplyLoanDto) {
 
         CreditDto loaLoanDto = service.applyLoan(loaApplyLoanDto);
 
-        return ResponseEntity.ok(RestResponse.of(loaLoanDto));
+        // return ResponseEntity.ok(RestResponse.of(loaLoanDto));
+        Map<String, String> MSG = new HashMap<>();
+        MSG.put("message","Demande de crédit crée !");
+        return ResponseEntity.ok(MSG);
     }
 
     @Operation(
@@ -93,11 +102,14 @@ public class CreditController {
             description = "Pay the remaining amount and close the loan. "
     )
     @DeleteMapping("/pay-loan-off/{id}")
-    public ResponseEntity<RestResponse<CrPayCreditOffResponseDto>> payLoanOff(@PathVariable Long id) {
+    public ResponseEntity<?> payLoanOff(@PathVariable Long id) {
 
         CrPayCreditOffResponseDto loaPayLoanOffResponseDto = service.payLoanOff(id);
 
-        return ResponseEntity.ok(RestResponse.of(loaPayLoanOffResponseDto));
+        Map<String, String> MSG = new HashMap<>();
+        MSG.put("message","Crédit payé !");
+        // return ResponseEntity.ok(RestResponse.of(loaPayLoanOffResponseDto));
+        return ResponseEntity.ok(MSG);
     }
 
 

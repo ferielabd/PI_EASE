@@ -43,7 +43,7 @@ public abstract class BaseEntityService<E extends BaseEntity, D extends JpaRepos
     }
 
     public Optional<E> findById(long id) {
-
+        List<E> all = dao.findAll();
         return dao.findById(id);
     }
 

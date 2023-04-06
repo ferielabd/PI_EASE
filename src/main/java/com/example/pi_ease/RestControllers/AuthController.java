@@ -124,12 +124,12 @@ public class AuthController {
                         Role client = roleRepository.findByName(TypeRole.CLIENT)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(client);
-                    case "INVESTORP":
+                    case "INVESTOR_P":
                         Role INVESTORP = roleRepository.findByName(TypeRole.INVESTOR_P)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(INVESTORP);
                         break;
-                    case "INVESTORNP":
+                    case "INVESTOR_NP":
                         Role INVESTORNP = roleRepository.findByName(TypeRole.INVESTOR_NP)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(INVESTORNP);
@@ -204,6 +204,9 @@ public class AuthController {
         return userRepositories.findByUsername(principal.getSubject()).orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getSubject()));
     }
 
+    public User getFakeUser(){
+        return userRepository.findByUsername("feriel abdellatif").get();
+    }
 
 
 }
