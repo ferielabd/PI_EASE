@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.example.pi_ease.messages.ResponseMessage;
+import com.example.pi_ease.Message.messages.ResponseMessage;
 import com.example.pi_ease.security.services.FilesStorageService;
 import org.apache.tomcat.jni.FileInfo;
 import org.springframework.beans.factory.annotation.Autowired;
