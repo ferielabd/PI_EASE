@@ -61,8 +61,8 @@ public class CreditController {
 
         return loaLoanDto;
     }
-
-    @GetMapping("/{id}")
+    @CrossOrigin(origins="http://localhost:4200")
+    @GetMapping("/loanHis/{id}")
     public CreditHistory findLoanHisById(@PathVariable Long id) {
 
         CreditHistory loaLoanDto = service.getCH(id);
