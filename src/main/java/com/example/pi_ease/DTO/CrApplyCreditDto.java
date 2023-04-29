@@ -8,28 +8,37 @@ public class CrApplyCreditDto {
     private Integer installmentCount;
     private BigDecimal principalLoanAmount;
     private BigDecimal monthlySalary;
+    private String attachment;
+    private String description;
+    private String nameSA;
+
+    public String getNameSA() {
+        return nameSA;
+    }
+
+    public void setNameSA(String nameSA) {
+        this.nameSA = nameSA;
+    }
+
+    public String getAttachment() {
+        return attachment;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 
     public Integer getInstallmentCount() {
         return installmentCount;
     }
 
-    public void setInstallmentCount(Integer installmentCount) {
-        this.installmentCount = installmentCount;
-    }
 
     public BigDecimal getPrincipalLoanAmount() {
         return principalLoanAmount;
-    }
-
-    public void setPrincipalLoanAmount(BigDecimal principalLoanAmount) {
-        this.principalLoanAmount = principalLoanAmount;
     }
 
     public BigDecimal getMonthlySalary() {
         return monthlySalary;
     }
 
-    public void setMonthlySalary(BigDecimal monthlySalary) {
-        this.monthlySalary = monthlySalary;
-    }
 }

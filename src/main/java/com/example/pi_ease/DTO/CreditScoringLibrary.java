@@ -17,10 +17,9 @@ public class CreditScoringLibrary {
 
     public double calculateCreditScore(CreditHistory creditHistory) {
         if(user == null)
-            this.user = authController.getCurrentUser();
+            this.user = authController.getFakeUser();
 
         double score = 0;
-        // creditHistory.setIncome(user.getSalaire());
         // Calcule le score en fonction des attributs de la demande de crédit
         score += creditHistory.getIncome() / 1000;
 

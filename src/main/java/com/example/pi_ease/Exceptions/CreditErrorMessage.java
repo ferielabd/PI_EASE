@@ -53,10 +53,7 @@ public enum CreditErrorMessage implements BaseErrorMessage {
         return message;
     }
 
-    @Override
-    public String getDetailMessage() {
-        return detailMessage;
-    }
+
 
     public void setDetailMessage(String extraDetail){
         detailMessage = detailMessage+" "+extraDetail;

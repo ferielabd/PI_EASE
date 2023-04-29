@@ -1,5 +1,8 @@
 package com.example.pi_ease.DAO.Entities;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -8,7 +11,8 @@ import java.util.Set;
 
 import javax.persistence.*;
 
-
+@Getter
+@Setter
 @Entity
 @Table(	name = "user",
         uniqueConstraints = {

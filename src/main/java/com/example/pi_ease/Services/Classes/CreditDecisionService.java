@@ -1,21 +1,21 @@
 package com.example.pi_ease.Services.Classes;
 
-import com.example.pi_ease.DAO.Entities.CreditHistoryType;
-import com.example.pi_ease.DAO.Entities.CreditHistory;
 import com.example.pi_ease.DTO.CreditRequest;
 import com.example.pi_ease.DTO.CreditScoringLibrary;
 import com.example.pi_ease.DTO.RepaymentCapacityDto;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service
 public class CreditDecisionService {
 
-    private CreditScoringLibrary creditScoringLibrary;
+   private CreditScoringLibrary creditScoringLibrary;
     public CreditDecisionService(CreditScoringLibrary creditScoringLibrary) {
         this.creditScoringLibrary = creditScoringLibrary;
     }
     public boolean isCreditApproved(CreditRequest creditRequest) {
-        // Vérification de la solvabilité de l'emprunteur
+       /* // Vérification de la solvabilité de l'emprunteur
         if (!isSolvencyVerified(creditRequest.getCreditHistory())) {
             return false;
         }
@@ -23,7 +23,7 @@ public class CreditDecisionService {
         // Vérification de l'historique de crédit de l'emprunteur
         if (!isCreditHistoryVerified(creditRequest.getCreditHistory())) {
             return false;
-        }
+        }*/
 
         // Vérification de la capacité de remboursement de l'emprunteur
         if (!isRepaymentCapacityVerified(creditRequest.getRepaymentCapacity())) {
@@ -39,7 +39,7 @@ public class CreditDecisionService {
         return true;
     }
 
-    private boolean isSolvencyVerified(CreditHistory creditHistory) {
+/*    private boolean isSolvencyVerified(CreditHistory creditHistory) {
         // Vérifie que l'emprunteur est solvable
         // Effectue une évaluation de crédit en utilisant la bibliothèque d'évaluation de crédit
         double creditScore = creditScoringLibrary.calculateCreditScore(creditHistory);
@@ -51,19 +51,19 @@ public class CreditDecisionService {
         // Vérifie l'historique de crédit de l'emprunteur
         return (creditHistory.getCreditHistoryType()==(CreditHistoryType.FAIR)||creditHistory.getCreditHistoryType()==CreditHistoryType.GOOD);
 
-    }
+    }*/
 
     private boolean isRepaymentCapacityVerified(RepaymentCapacityDto repaymentCapacity) {
         // Vérifie la capacité de remboursement de l'emprunteur
-        int maxMonthlyPayment = (int) (repaymentCapacity.getMonthlyIncome() * 0.4);
-        int monthlyPayment = repaymentCapacity.getMonthlyExpenses();
-        return monthlyPayment <= maxMonthlyPayment;
+        BigDecimal maxMonthlyPayment =  (repaymentCapacity.getMonthlyIncome().multiply(BigDecimal.valueOf(0.4)));
+        BigDecimal monthlyPayment = repaymentCapacity.getMonthlyIncome().multiply(BigDecimal.valueOf(1/3));
+        return monthlyPayment.intValue() <= maxMonthlyPayment.intValue();
     }
 
 
-    private boolean isLoanAmountVerified(double loanAmount, RepaymentCapacityDto repaymentCapacity) {
+    private boolean isLoanAmountVerified(BigDecimal loanAmount, RepaymentCapacityDto repaymentCapacity) {
         // Vérifie que le montant du crédit demandé ne dépasse pas la capacité de remboursement de l'emprunteur
-        double maxLoanAmount = repaymentCapacity.getMonthlyIncome() * 12 * 0.3;
-        return loanAmount <= maxLoanAmount;
+        BigDecimal maxLoanAmount = repaymentCapacity.getMonthlyIncome().multiply(BigDecimal.valueOf( 12 )).multiply(BigDecimal.valueOf( 0.3));
+        return loanAmount.intValue() <= maxLoanAmount.intValue();
     }
 }

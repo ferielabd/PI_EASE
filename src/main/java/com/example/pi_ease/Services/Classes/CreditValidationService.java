@@ -5,9 +5,7 @@ import com.example.pi_ease.DAO.Entities.CreditStatusType;
 import com.example.pi_ease.DTO.CrApplyCreditDto;
 import com.example.pi_ease.Exceptions.CreditErrorMessage;
 import com.example.pi_ease.Exceptions.IllegalFieldException;
-import com.example.pi_ease.Exceptions.ItemNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -154,7 +152,7 @@ public class CreditValidationService {
     }
 
     public void controlIsLoanNotAlreadyPaidOff(Credit loaLoan) {
-        System.out.println(loaLoan.getCreditStatusType());
+        //System.out.println(loaLoan.getCreditStatusType());
         if (loaLoan.getCreditStatusType() == CreditStatusType.PAID) {
             throw new IllegalFieldException(CreditErrorMessage.LOAN_ALREADY_PAID_OFF);
         }

@@ -3,17 +3,19 @@ package com.example.pi_ease.DTO;
 import com.example.pi_ease.DAO.Entities.CreditHistory;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class CreditRequest {
 
-    private CreditHistory creditHistory;
+   // private CreditHistory creditHistory;
     private RepaymentCapacityDto repaymentCapacity;
-    private double loanAmount;
+    private BigDecimal loanAmount;
 
     // Constructeur prenant en compte tous les attributs de la demande de crédit
-    public CreditRequest(  CreditHistory creditHistory, RepaymentCapacityDto repaymentCapacity, double loanAmount) {
+    public CreditRequest(  /*CreditHistory creditHistory,*/ RepaymentCapacityDto repaymentCapacity, BigDecimal loanAmount) {
 
-        this.creditHistory = creditHistory;
+       // this.creditHistory = creditHistory;
         this.repaymentCapacity = repaymentCapacity;
         this.loanAmount = loanAmount;
     }
@@ -21,13 +23,7 @@ public class CreditRequest {
     // Getters et setters pour chaque attribut
 
 
-    public CreditHistory getCreditHistory() {
-        return creditHistory;
-    }
 
-    public void setCreditHistory(CreditHistory creditHistory) {
-        this.creditHistory = creditHistory;
-    }
 
     public RepaymentCapacityDto getRepaymentCapacity() {
         return repaymentCapacity;
@@ -37,11 +33,11 @@ public class CreditRequest {
         this.repaymentCapacity = repaymentCapacity;
     }
 
-    public double getLoanAmount() {
+    public BigDecimal getLoanAmount() {
         return loanAmount;
     }
 
-    public void setLoanAmount(double loanAmount) {
+    public void setLoanAmount(BigDecimal loanAmount) {
         this.loanAmount = loanAmount;
     }
 

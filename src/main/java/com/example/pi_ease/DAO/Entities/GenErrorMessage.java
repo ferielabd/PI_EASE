@@ -22,8 +22,5 @@ public enum GenErrorMessage implements BaseErrorMessage {
         return message;
     }
 
-    @Override
-    public String getDetailMessage() {
-        return detailMessage;
-    }
+
 }

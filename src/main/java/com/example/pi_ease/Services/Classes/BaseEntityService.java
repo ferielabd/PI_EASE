@@ -1,6 +1,5 @@
 package com.example.pi_ease.Services.Classes;
 
-import com.example.pi_ease.DAO.Entities.BaseAdditionalFields;
 import com.example.pi_ease.DAO.Entities.BaseEntity;
 import com.example.pi_ease.DAO.Entities.GenErrorMessage;
 import com.example.pi_ease.DAO.Entities.User;
@@ -11,7 +10,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,31 +47,11 @@ public abstract class BaseEntityService<E extends BaseEntity, D extends JpaRepos
 
     public E save(E entity) {
 
-        setAdditionalFields(entity);
-
         entity = dao.save(entity);
 
         return entity;
     }
 
-    private void setAdditionalFields(E entity) {
-
-        BaseAdditionalFields baseAdditionalFields = entity.getBaseAdditionalFields();
-
-
-        if (baseAdditionalFields == null) {
-
-            baseAdditionalFields = new BaseAdditionalFields();
-            entity.setBaseAdditionalFields(baseAdditionalFields);
-        }
-
-        if (entity.getId() == 0) {
-
-            baseAdditionalFields.setCreateDate(new Date());
-        }
-
-        baseAdditionalFields.setUpdateDate(new Date());
-    }
 
     public void delete(E entity) {
         dao.delete(entity);

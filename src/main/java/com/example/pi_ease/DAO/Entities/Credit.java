@@ -11,8 +11,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Setter
-@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -24,29 +22,29 @@ public class Credit extends BaseEntity  {
     long id;
 
     @Column(name="INSTALLMENT_COUNT",nullable = false)
-     Integer installmentCount;
+     Integer installmentCount;//
 
     @Column(name="PRINCIPAL_LOAN_AMOUNT", precision = 19 ,scale =2 ,nullable = false)
      BigDecimal principalLoanAmount;
 
     @Column(name="MONTHLY_INSTALLMENT_AMOUNT", precision = 19 ,scale =2 ,nullable = false)
-     BigDecimal monthlyInstallmentAmount;
+     BigDecimal monthlyInstallmentAmount; //
 
     @Column(name="INTEREST_TO_BE_PAID", precision = 19 ,scale =2 ,nullable = false)
-     BigDecimal interestToBePaid;
+     BigDecimal interestToBePaid; //
 
     @Column(name="PRINCIPAL_TO_BE_PAID", precision = 19 ,scale =2 ,nullable = false)
-     BigDecimal principalToBePaid;
+     BigDecimal principalToBePaid; //
 
     @Column(name="REMAINING_PRINCIPAL", precision = 19 ,scale =2 ,nullable = false)
-     BigDecimal remainingPrincipal;
+     BigDecimal remainingPrincipal;//
 
     @Column(name="DUE_DATE",nullable = false)
-     LocalDate dueDate;
+     LocalDate dueDate;//
 
     @Enumerated(EnumType.STRING)
     @Column(name ="LOAN_STATUS_TYPE", length=30,nullable = false)
-     CreditStatusType creditStatusType;
+     CreditStatusType creditStatusType;//
 
     @NotNull
     String attachment;
@@ -54,16 +52,29 @@ public class Credit extends BaseEntity  {
     @NotNull
     String Description;
 
-  @ManyToOne
+    @Enumerated(EnumType.STRING)
+    TypeStatus statusC;
+
+    @ManyToOne
+    @JsonIgnore
     ActivitySector activitySector;
     @ManyToOne
     User userCredit;
 
     @OneToMany(mappedBy = "creditT",cascade = CascadeType.ALL)
-
+    @JsonIgnore
     List<Tranche> trancheList;
     @ManyToOne
+    @JsonIgnore
     CreditHistory creditHistory;
+
+    public TypeStatus getStatusC() {
+        return statusC;
+    }
+
+    public void setStatusC(TypeStatus statusC) {
+        this.statusC = statusC;
+    }
 
     public void setId(int id) {
         id = id;

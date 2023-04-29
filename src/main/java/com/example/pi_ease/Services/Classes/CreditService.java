@@ -10,33 +10,41 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
 public class CreditService {
 
     private final CreditValidationService creditValidationService;
-
+    private  CreditHistoryEntityService creditHistoryEntityService;
+    private  ActivitySectorService activitySectorService;
     private final CreditEntityService creditEntityService;
     private final TrancheEntityService trancheEntityService;
     private final AuthController authController;
+
+
     @Autowired
     private EmailService emailService;
 
     @Autowired
-    public CreditService(CreditValidationService creditValidationService, CreditEntityService creditEntityService, TrancheEntityService trancheEntityService, AuthController authController) {
+    public CreditService(CreditValidationService creditValidationService, CreditEntityService creditEntityService,
+                         TrancheEntityService trancheEntityService, AuthController authController,CreditHistoryEntityService creditHistoryEntityService,ActivitySectorService activitySectorService) {
         this.creditValidationService = creditValidationService;
         this.creditEntityService = creditEntityService;
         this.trancheEntityService = trancheEntityService;
         this.authController = authController;
+        this.creditHistoryEntityService=creditHistoryEntityService;
+        this.activitySectorService=activitySectorService;
     }
 
     private final BigDecimal INTEREST_RATE = BigDecimal.valueOf(8.02/100);
     private final BigDecimal TAX_RATE = BigDecimal.valueOf(20/100);
     private final BigDecimal ALLOCATION_FEE = BigDecimal.valueOf(45);
-    private final int INSTALLMENT_COUNT_LIMIT = 360;
+    private final int INSTALLMENT_COUNT_LIMIT = 180;
 
-    public  BigDecimal/*CrCalculateCreditResponseDto */calculateLoan(Integer installment, BigDecimal principalLoanAmount) {
+    public  List<BigDecimal>calculateLoan(Integer installment, BigDecimal principalLoanAmount) {
 
         creditValidationService.controlIsParameterNotNull(installment,principalLoanAmount);
 
@@ -68,11 +76,17 @@ public class CreditService {
         loaCalculateLoanResponseDto.setAnnualCostRate(annualCostRate);
         loaCalculateLoanResponseDto.setAllocationFee(ALLOCATION_FEE);
 
-       // return loaCalculateLoanResponseDto;
-        return totalPayment;
+        List<BigDecimal> result=new ArrayList<>();
+        result.add(principalLoanAmount);
+        result.add(installmentCount);
+        result.add(totalInterest);
+        result.add(monthlyInstallmentAmount);
+        result.add(totalPayment);
+
+        return result;
     }
 
-    public BigDecimal/*CrCalculateLateFeeResponseDto*/ calculateLateFee(Long id) {
+    public BigDecimal calculateLateFee(Long id) {
 
         Credit loaLoan = creditEntityService.getByIdWithControl(id);
 
@@ -82,7 +96,7 @@ public class CreditService {
 
     }
 
-    private BigDecimal/*CrCalculateLateFeeResponseDto */calculateLateFeeAndUpdateLoan(Credit loaLoan) {
+    private BigDecimal calculateLateFeeAndUpdateLoan(Credit loaLoan) {
 
         LocalDate dueDate = loaLoan.getDueDate();
 
@@ -135,6 +149,18 @@ public class CreditService {
         return credit;
     }
 
+    public List<Credit> allLoan() {
+        List<Credit> credit=creditEntityService.findAll();
+
+        return credit;
+    }
+
+    public CreditHistory getCH(long id ) {
+        CreditHistory creditHistory=creditHistoryEntityService.findById(id).get();
+
+        return creditHistory;
+    }
+
     public CreditDto applyLoan(CrApplyCreditDto loaLoanApplyLoanDto) {
 
         creditValidationService.controlIsParameterNotNull(loaLoanApplyLoanDto);
@@ -142,6 +168,13 @@ public class CreditService {
         Integer installment = loaLoanApplyLoanDto.getInstallmentCount();
         BigDecimal installmentCount = BigDecimal.valueOf(installment);
         BigDecimal monthlySalary = loaLoanApplyLoanDto.getMonthlySalary();
+        String attachment= loaLoanApplyLoanDto.getAttachment();
+        String descrip= loaLoanApplyLoanDto.getDescription();
+        String nameSA=loaLoanApplyLoanDto.getNameSA();
+
+        CreditHistory creditHistory=new CreditHistory();
+        ActivitySector activitySector=new ActivitySector();
+
 
         Credit credit = CreditMapper.INSTANCE.convertToCredit(loaLoanApplyLoanDto);
 
@@ -174,23 +207,40 @@ public class CreditService {
         // User user = authController.getCurrentUser();
         User user = authController.getFakeUser();
 
+        creditHistory.setIncome(monthlySalary.doubleValue());
+
+        if(monthlySalary.intValue()>=1500)
+        {
+            creditHistory.setCreditHistoryType(CreditHistoryType.FAIR);
+        } else if (monthlySalary.intValue()>=2500) {
+            creditHistory.setCreditHistoryType(CreditHistoryType.GOOD);
+        }else {
+            creditHistory.setCreditHistoryType(CreditHistoryType.FAIR);
+
+        }
+        creditHistory.setLoanAmount(principalLoanAmount.intValue());
+
+
+        creditHistory=creditHistoryEntityService.save(creditHistory);
+
+        activitySector.setNom(nameSA);
+        activitySector=activitySectorService.save(activitySector);
+
         credit. setUserCredit(user);
         credit.setMonthlyInstallmentAmount(monthlyInstallmentAmount);
         credit.setInterestToBePaid(totalInterest);
-        credit.setPrincipalToBePaid(principalLoanAmount);
+        credit.setPrincipalToBePaid(totalPayment);
+        credit.setPrincipalLoanAmount(principalLoanAmount);
         credit.setRemainingPrincipal(principalLoanAmount);
         credit.setDueDate(dueDate);
         credit.setCreditStatusType(CreditStatusType.CONTINUING);
-
-        BaseAdditionalFields baseAdditionalFields = new BaseAdditionalFields();
-        baseAdditionalFields.setCreatedBy(user.getId());
-        credit.setBaseAdditionalFields(baseAdditionalFields);
-
-        credit.setDescription("test");
-        credit.setAttachment("test");
-
+        credit.setDescription(descrip);
+        credit.setAttachment(attachment);
+        credit.setStatusC(TypeStatus.NOT_APPROVED);
+        credit.setCreditHistory(creditHistory);
         credit = creditEntityService.save(credit);
-        // this.emailService.sendSimpleEmail(user.getEmail(),"Loan Done", "your loan request is taken into consideration");
+        credit.setActivitySector(activitySector);
+         this.emailService.sendSimpleEmail(user.getEmail(),"Loan Done", "your loan request is taken into consideration");
 
         CreditDto creditDto = CreditMapper.INSTANCE.convertToCreditDto(credit);
 
@@ -284,7 +334,20 @@ public class CreditService {
         return loaPayLoanOffResponseDto;
     }
 
+   public void UpDateStatusLoan(Long id) {
 
+    Credit loaLoan = creditEntityService.getByIdWithControl(id);
+
+
+
+    loaLoan.setStatusC(TypeStatus.APPROVED);
+
+    loaLoan = creditEntityService.save(loaLoan);
+       User user = authController.getFakeUser();
+       this.emailService.sendSimpleEmail(user.getEmail(),"Décision", "your loan is Approved");
+
+
+}
 
 
 }

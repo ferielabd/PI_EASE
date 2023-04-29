@@ -19,9 +19,11 @@ public class CreditHistory extends BaseEntity {
     long Id;
 
      double income;
+
+     @Enumerated(EnumType.STRING)
      CreditHistoryType creditHistoryType;
      int loanAmount;
-    @OneToMany(mappedBy = "creditHistory",cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "creditHistory",cascade = CascadeType.ALL)
     private List<Credit> Credits;
 
     public void setId(long id) {
